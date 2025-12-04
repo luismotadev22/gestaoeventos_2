@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registo de Conta - IPCA Eventos</title>
+    <link rel="stylesheet" href="estilos/login.css">
+</head>
+
+<body>
+
+    <div class="login-wrapper">
+
+        <div class="login-card">
+
+            <div class="login-header">
+                <img src="imagens/LogoIPCA.png" alt="Logotipo IPCA" class="login-logo">
+                <h2> Criar Conta na Plataforma</h2>
+            </div>
+
+            <form id="form-registo">
+                <div class="form-group">
+                    <label for="registo-email">E-mail Universitário</label>
+                    <input type="email" id="registo-email" name="email" required placeholder="a23314@alunos.ipca.pt">
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de Conta</label>
+                    <div class="radio-group" style="display: flex; gap: 20px;">
+
+                        <label>
+                            <input type="radio" name="perfil" value="participante" id="perfil-participante" checked>
+                            Participante
+                        </label>
+
+                        <label>
+                            <input type="radio" name="perfil" value="organizador" id="perfil-organizador">
+                            Organizador
+                        </label>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="registo-password">Palavra-passe</label>
+                    <input type="password" id="registo-password" name="password" required
+                        placeholder="mínimo 6 caracteres">
+                </div>
+
+                <div class="form-group">
+                    <label for="registo-password2">Confirmar Palavra-passe</label>
+                    <input type="password" id="registo-password2" name="password2" required>
+                </div>
+
+                <button type="submit" class="btn btn-primario btn-full">Registar</button>
+
+                <p id="mensagem-registo" class="erro" style="margin-top: 15px; text-align: center;"></p>
+
+                <p id="mensagem-erro" class="erro" style="margin-top: 15px; text-align: center;"></p>
+            </form>
+
+            <div class="login-footer-links">
+
+                <hr style="margin: 15px 0; border-color: var(--cor-cinza-fundo);">
+
+                <p>
+                    Já tem conta?
+                    <a href="./login.html" class="link-primario">Iniciar Sessão Aqui</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+
+</body>
+
+<body>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+    <script src="./firebase_connection.js" type="module"></script>
+    
+    <script src="./registo.js" type="module"></script> 
+</body>
+
+</html>

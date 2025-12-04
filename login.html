@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - IPCA Eventos</title>
+<link rel="stylesheet" href="estilos/login.css">
+</head>
+<body>
+
+    <div class="login-wrapper">
+
+        <div class="login-card">
+            
+            <div class="login-header">
+                <img src="imagens/LogoIPCA.png" alt="Logotipo IPCA" class="login-logo"> 
+                <h2>Aceder à Plataforma</h2>
+            </div>
+
+            <form id="form-login">
+                <div class="form-group">
+                    <label for="email">E-mail Institucional</label>
+                    <input type="email" id="email" name="email" required placeholder="exemplo@ipca.pt">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Palavra-passe</label>
+                    <input type="password" id="password" name="password" required placeholder="Insira a sua palavra-passe">
+                </div>
+                
+                <button type="submit" class="btn btn-primario btn-full">Entrar</button>
+                <p id="mensagem-erro" class="erro"></p>
+            </form>
+            
+            <div class="login-footer-links">
+                <a href="recuperar_senha.html" class="link-secundario">Esqueceu-se da Palavra-passe?</a>
+                
+                <hr style="margin: 15px 0; border-color: var(--cor-cinza-fundo);">
+                
+                <p>
+                    Não tem conta? 
+                    <a href="./registo.html" class="link-primario">Criar Conta Agora</a> 
+                </p>
+                
+            </div>
+            
+        </div>
+
+    </div>
+    
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+    <script src="./firebase_connection.js" type="module"></script>
+    
+    <script src="./login.js" type="module"></script> 
+</body>
+</html>

@@ -1,0 +1,177 @@
+:root {
+    --cor-azul-profundo: #1E3A8A; /* Primária */
+    --cor-azul-claro: #3B82F6;    /* Secundária */
+    --cor-amarelo-destaque: #FACC15; /* Destaque CTA / Dourado */
+    --cor-cinza-fundo: #F3F4F6;
+    --cor-branco: #FFFFFF;
+    --cor-texto-principal: #1f2937;
+    --cor-texto-secundario: #6b7280;
+    --sombra-leve: 0 4px 12px rgba(0,0,0,0.08); 
+    --sombra-media: 0 8px 25px rgba(0,0,0,0.15); 
+}
+
+/* Reset e Tipografia (UI/UX) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+}
+
+body {
+    font-family: 'Poppins', Arial, sans-serif; 
+    line-height: 1.6;
+    background-color: var(--cor-cinza-fundo); 
+    color: var(--cor-texto-principal);
+    display: flex; /* Essencial para centrar o login-wrapper */
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ========================================= */
+/* 2. ESTILOS DE BOTÕES (UI/UX)              */
+/* ========================================= */
+
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 8px; 
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+/* Botão Primário (Dourado/Amarelo - Máximo Destaque) */
+.btn-primario {
+    background: linear-gradient(to bottom, var(--cor-amarelo-destaque) 0%, #eab308 100%);
+    color: var(--cor-azul-profundo); 
+    border-color: #eab308;
+    box-shadow: 0 4px 15px rgba(250, 202, 21, 0.65);
+    
+}
+.btn-primario:hover {
+    background-color: #eab308;
+    color: var(--cor-azul-profundo);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(250, 202, 21, 0.8);
+}
+
+/* ========================================= */
+/* 3. LAYOUT ESPECÍFICO DO LOGIN (CENTRALIZAÇÃO) */
+/* ========================================= */
+
+.login-wrapper {
+    /* Centraliza o cartão vertical e horizontalmente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1; /* Ocupa o espaço central do body */
+    padding: 20px;
+}
+
+.login-card {
+    background-color: var(--cor-branco);
+    padding: 40px;
+    border-radius: 12px;
+    /* Sombra elegante para dar profundidade e destaque (UX) */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
+    width: 100%;
+    max-width: 420px; 
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-logo {
+    height: 60px;
+    margin-bottom: 15px;
+    filter: brightness(2.0);
+    filter: saturate(2.0);
+    text-align: center;
+    align-self: start;
+    align-items: center;
+}
+
+.login-header h2 {
+    font-size: 24px;
+    color: var(--cor-azul-profundo);
+    font-weight: 700;
+}
+
+/* ========================================= */
+/* 4. ESTILOS DO FORMULÁRIO (UX)             */
+/* ========================================= */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--cor-texto-principal);
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.2s, box-shadow 0.2s; 
+}
+
+/* Efeito de Focus (Feedback UX) */
+.form-group input:focus {
+    border-color: var(--cor-azul-claro);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); 
+    outline: none;
+}
+
+/* Botão de Entrar (Ocupa a largura total) */
+.btn-full {
+    width: 100%;
+    margin-top: 15px;
+    padding: 14px;
+    font-size: 17px;
+}
+
+/* ========================================= */
+/* 5. LINKS DE RODAPÉ DO FORMULÁRIO          */
+/* ========================================= */
+
+.login-footer-links {
+    text-align: center;
+    margin-top: 14px;
+    padding-top: 0px;
+    border-top: 1px solid var(--cor-cinza-fundo);
+}
+
+.link-secundario {
+    display: block;
+    margin-bottom: 15px;
+    color: var(--cor-texto-secundario);
+    text-decoration: none;
+    font-size: 14px;
+}
+.link-secundario:hover {
+    color: var(--cor-azul-claro);
+    text-decoration: underline;
+}
+
+.link-primario {
+    color: var(--cor-azul-profundo);
+    font-weight: 600;
+    text-decoration: none;
+}
+.link-primario:hover {
+    text-decoration: underline;
+}

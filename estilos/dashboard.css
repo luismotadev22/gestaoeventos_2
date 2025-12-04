@@ -1,0 +1,321 @@
+:root {
+    /* I. CORES DA MARCA (IPCA) */
+    --cor-azul-profundo: #004488;
+    --cor-amarelo-destaque: #FFCC00;
+    --cor-azul-claro-ui: #4285F4;
+    
+    /* II. CORES GERAIS E DE TEXTO */
+    --cor-fundo-geral: #F8F8F8;
+    --cor-fundo-conteudo: #FFFFFF;
+    --cor-texto-principal: #333333;
+    --cor-texto-claro: #FFFFFF;
+    --cor-texto-secundario: #666;
+
+    /* III. CORES DE ESTADO */
+    --cor-sucesso: #28a745;
+    --cor-erro: #dc3545;
+}
+
+/* =========================================== */
+/* ESTILOS GLOBAIS E LAYOUT                 */
+/* =========================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--cor-fundo-geral);
+    color: var(--cor-texto-principal);
+    line-height: 1.6;
+}
+
+.dashboard-container {
+    display: flex; /* Define o layout lateral (Sidebar + Conteúdo) */
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* =========================================== */
+/* ESTILOS DA BARRA LATERAL (SIDEBAR)       */
+/* =========================================== */
+.sidebar {
+    width: 260px;
+    background-color: var(--cor-azul-claro-ui);
+    color: var(--cor-texto-claro);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    transition: width 0.3s ease-in-out; /* Adicionado para a transição do toggle */
+}
+
+.logo-area {
+    padding: 25px 20px;
+    text-align: center;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-ipca {
+    max-width: 140px;
+    filter: brightness(2.0);
+    filter: saturate(2.0);
+    text-align: center;
+    align-self: start;
+    align-items: center;
+}
+
+.menu-principal {
+    flex-grow: 1; 
+    padding-top: 20px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 25px;
+    color: var(--cor-texto-claro);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.menu-item i {
+    width: 20px; 
+    text-align: center;
+}
+
+.menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-item.active {
+    background-color: var(--cor-amarelo-destaque);
+    color: var(--cor-azul-profundo);
+    font-weight: bold;
+}
+
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.perfil-info {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.perfil-info .nome-utilizador {
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.perfil-info .perfil-utilizador {
+    font-size: 0.90rem;
+    opacity: 0.90;
+}
+
+.btn-logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--cor-texto-claro);
+    border: 1px solid var(--cor-amarelo-destaque);
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.btn-logout:hover {
+    background-color: var(--cor-amarelo-destaque);
+    color: var(--cor-azul-profundo);
+}
+
+/* =========================================== */
+/* ESTILOS DO CONTEÚDO PRINCIPAL            */
+/* =========================================== */
+.main-content {
+    flex-grow: 1;
+    padding: 30px 40px;
+    overflow-y: auto; 
+    transition: width 0.3s ease-in-out;
+    width: calc(100% - 260px); /* Importante para o layout lateral */
+}
+
+.main-header h1 {
+    color: var(--cor-azul-profundo);
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.main-header p {
+    color: var(--cor-texto-secundario);
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+}
+
+/* =========================================== */
+/* ESTILOS DOS WIDGETS (GRID)               */
+/* =========================================== */
+.widgets-container {
+    display: grid; /* Esta é a chave para a organização */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+    margin-top: 90px;
+    padding: 5px;
+}
+
+.widget {
+    background-color: var(--cor-amarelo-destaque);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--cor-fundo-geral);
+}
+
+.widget h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--cor-azul-profundo);
+    font-size: 1.1rem;
+}
+
+.widget-numero {
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 5px 0;
+    color: var(--cor-texto-principal);
+}
+
+/* NOVO: Estilo para o título do Próximo Evento (Participante) */
+.widget-titulo-destaque {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--cor-azul-profundo);
+    margin-bottom: 10px;
+}
+
+.widget-numero.widget-dinheiro {
+    color: var(--cor-texto-principal);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    font-size: 2.5rem; 
+    line-height: 1.9;
+}
+
+.widget-detalhe {
+    color: var(--cor-texto-secundario);
+    font-size: 0.9rem;
+}
+
+.widget-detalhe i {
+    margin-right: 8px;
+    color: var(--cor-azul-claro-ui);
+}
+
+
+/* =========================================== */
+/* WIDGET DE AÇÃO RÁPIDA (CTA) E BOTÕES     */
+/* =========================================== */
+.widget-cta {
+    background-color: var(--cor-amarelo-destaque);
+    color: var(--cor-texto-preto);
+}
+
+.widget-cta h3 {
+    color: var(--cor-azul-profundo);
+    font-size: 1.3rem;
+}
+
+.widget-cta .widget-detalhe {
+    color: var(--cor-texto-secundario);
+    margin-bottom: 20px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primario {
+    background-color: var(--cor-azul-profundo);
+    color: var(--cor-texto-claro);
+}
+
+.btn-primario:hover {
+    background-color: #003366; 
+}
+
+/* Ajuste no CTA para o botão branco */
+.widget-cta .btn-primario {
+    background-color: var(--cor-fundo-conteudo);
+    color: var(--cor-azul-profundo);
+}
+
+.widget-cta .btn-primario:hover {
+    background-color: #f0f0f0;
+}
+
+/* =========================================== */
+/* LÓGICA DO TOGGLE DA BARRA LATERAL (DO SEU CÓDIGO) */
+/* =========================================== */
+.toggle-btn {
+    position: absolute;
+    top: 70px; 
+    right: -25px;
+    width: 25px;
+    height: 40px;
+    background-color: var(--cor-amarelo-destaque);
+    color: var(--cor-azul-profundo);
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 0 5px 5px 0;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Estado Recolhido */
+.dashboard-container.sidebar-recolhida .sidebar {
+    width: 80px; 
+}
+
+.dashboard-container.sidebar-recolhida .main-content {
+    width: calc(100% - 80px); 
+}
+
+.dashboard-container.sidebar-recolhida .logo-ipca {
+    max-width: 50px; 
+}
+
+.dashboard-container.sidebar-recolhida .menu-item span,
+.dashboard-container.sidebar-recolhida .perfil-info,
+.dashboard-container.sidebar-recolhida .btn-logout span {
+    display: none; 
+}
+
+.dashboard-container.sidebar-recolhida .menu-item {
+    justify-content: center;
+}

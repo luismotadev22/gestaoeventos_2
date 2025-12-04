@@ -1,0 +1,256 @@
+:root {
+    --cor-azul-profundo: #1E3A8A;
+    --cor-azul-claro: #3B82F6;
+    --cor-amarelo-destaque: #FACC15;
+    --cor-cinza-fundo: #F3F4F6;
+    --cor-branco: #FFFFFF;
+    --cor-texto-principal: #1f2937;
+    --cor-texto-secundario: #6b7280;
+}
+
+/* Reset básico e Fonte principal (Melhora a consistência visual) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: var(--cor-cinza-fundo); /* Fundo neutro */
+    color: var(--cor-texto-principal);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Garante que o rodapé fica em baixo */
+}
+
+main {
+    flex-grow: 1; /* Faz o conteúdo principal "empurrar" o rodapé */
+}
+
+/* Container (UI/UX)
+  Limita a largura do conteúdo em ecrãs grandes, melhorando a leitura.
+*/
+.container {
+    max-width: 1200px;
+    margin: 0 auto; 
+    padding: 0 20px;
+}
+
+/* ========================================= */
+/* BOTÕES (UI/UX) - Elementos de Ação        */
+/* ========================================= */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+/* Botão Primário (Amarelo, para "Inscreva-se") */
+.btn-primario {
+    background-color: var(--cor-amarelo-destaque);
+    color: var(--cor-verde-claro);
+    border-color: var(--cor-amarelo-destaque);
+    color: var(--cor-verde-claro);
+}
+.btn-primario:hover {
+    background-color: #eab308; /* Tom mais escuro no hover (Feedback UX) */
+    color: var(--cor-azul-profundo);
+}
+
+/* Botão Secundário (Azul, para "Login") */
+.btn-secundario {
+    background-color: var(--cor-amarelo-destaque);
+    color: var(--cor-branco);
+    border-color: var(--cor-amarelo-destaque); 
+    padding: 4px 24px; 
+    font-size: 16px; 
+    border-radius: 8px
+}
+
+.btn-secundario:hover {
+    background-color: var(--cor-amarelo-destaque); 
+    color: var(--cor-azul-profundo);
+    background-color: #eab308;
+}
+
+/* Botão Outline (para "Ver Todos") */
+.btn-outline {
+    background-color: var(--cor-amarelo-destaque);
+    color: var(--cor-branco);         
+    border-color: var(--cor-amarelo-destaque);
+}
+.btn-outline:hover {
+    background-color: var(--cor-amarelo-destaque);
+    color: var(--cor-azul-profundo);
+    background-color: #d2a314;
+}
+
+
+.navbar {
+    background-color: var(--cor-verde-claro);
+    padding: 15px 0;
+    box-shadow: 0 2px 5px rgba(60, 172, 49, 0.1);
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-logo img {
+    height: 40px; /* Controla o tamanho do logo */
+}
+
+.navbar-menu ul {
+    list-style: none;
+    display: flex;
+    gap: 30px; /* Espaçamento entre links */
+}
+
+.navbar-menu a {
+    color: var(--cor-azul-claro);
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 500;
+    padding-bottom: 5px;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s;
+}
+
+/* Feedback visual (UX) */
+.navbar-menu a:hover,
+.navbar-menu a.ativo {
+    border-bottom-color: var(--cor-azul-claro); /* Destaque amarelo */
+}
+
+/* ========================================= */
+/* BANNER (UI)                               */
+/* ========================================= */
+.banner-principal {
+    position: relative;
+    background-color: var(--cor-azul-claro); /* Cor de fallback */
+    /* Adicione a sua imagem de banner aqui */
+    background-image: url('../imagens/banner_principal.jpg'); 
+    background-size: cover;
+    background-position: center;
+    color: var(--cor-branco);
+    text-align: center;
+    padding: 100px 0;
+}
+
+/* Overlay (UI) - Melhora a legibilidade do texto sobre a imagem */
+.banner-overlay {
+    background-color: var(--cor-azul-claro); /* Overlay azul profundo */
+    padding: 10px 0;
+}
+
+.texto-banner h1 {
+    font-size: 42px;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.texto-banner p {
+    font-size: 20px;
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ========================================= */
+/* SECÇÃO DESTAQUES (UI/UX)                  */
+/* ========================================= */
+.secao-destaques {
+    padding: 40px 0;
+    background-color: var(--cor-cinza-fundo);
+}
+
+.secao-destaques h2 {
+    text-align: center;
+    font-size: 32px;
+    color: var(--cor-azul-profundo);
+    margin-bottom: 40px;
+}
+
+/* Grelha responsiva (UI) */
+.grade-destaques {
+    display: grid;
+    /* Em ecrãs pequenos 1 coluna, em médios 2, em grandes 3 */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 30px;
+}
+
+.cartao-evento {
+    background-color: var(--cor-branco);
+    border-radius: 8px;
+    box-shadow: var(--cor-amarelo-destaque)
+}
+
+/* Feedback visual (UX) */
+.cartao-evento:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--cor-amarelo-destaque);
+}
+
+.cartao-imagem {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Garante que a imagem preenche o espaço */
+}
+
+.cartao-conteudo {
+    padding: 20px;
+}
+
+.cartao-data {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cor-azul-claro);
+    margin-bottom: 8px;
+}
+
+.cartao-conteudo h3 {
+    font-size: 20px;
+    color: var(--cor-azul-profundo);
+    margin-bottom: 10px;
+}
+
+.cartao-descricao {
+    font-size: 15px;
+    color: var(--cor-texto-secundario);
+    margin-bottom: 15px;
+}
+
+.cartao-link {
+    font-weight: 600;
+    color: var(--cor-azul-profundo);
+    text-decoration: none;
+}
+.cartao-link:hover {
+    text-decoration: underline;
+}
+
+.cta-central {
+    text-align: center;
+    margin-top: 50px;
+    color: var(--cor-amarelo-destaque);
+}
+
+
+.rodape {
+    background-color: var(--cor-azul-claro);
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 30px 0;
+}

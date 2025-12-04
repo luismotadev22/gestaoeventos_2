@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Plataforma IPCA</title>
+    <link rel="stylesheet" href="../estilos/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <div class="dashboard-container" id="dashboard-container">
+        
+        <aside class="sidebar" id="sidebar">
+            <div class="logo-area">
+                <a id="logo-link">
+                    <img src="../imagens/LogoIPCA.png" alt="Logótipo IPCA" class="logo-ipca">
+                </a>
+            </div>
+            
+            <button id="toggle-sidebar" class="toggle-btn" title="Recolher Menu">←</button>
+
+            <nav class="menu-principal" id="menu-principal-dinamico"></nav>
+
+         <div class="sidebar-footer">
+    <div class="perfil-info">
+        <p class="nome-utilizador" id="display-nome-utilizador">A carregar...</p>
+        <p class="perfil-utilizador" id="display-perfil-utilizador"></p>
+    </div>
+    <a href="../login.html" class="btn-logout" id="btn-logout">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Sair</span>
+    </a>
+</div>
+
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <h1 id="display-header-titulo">A carregar dashboard...</h1>
+                <p id="display-header-subtitulo">Por favor, aguarde.</p>
+            </header>
+
+            <section class="widgets-container" id="conteudo-principal-dinamico">
+                </section>
+        </main>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+    <script src="./firebase_connection.js" type="module"></script>
+    
+    <script src="./dashboard.js" type="module"></script> 
+</body>
+</html>
