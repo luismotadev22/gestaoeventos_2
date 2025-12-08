@@ -38,7 +38,7 @@ function carregarConteudoDashboard(perfil, emailCompleto) {
     // Obter o nome base do email (para a saudação dinâmica)
     const nomeBase = emailCompleto.split('@')[0];
 
-    // --- 3. OBTER "PONTOS DE INJEÇÃO" DO HTML ---
+    //  Pontos de injeção do javascript para o HTML com base no meu id
     const menuContainer = document.getElementById('menu-principal-dinamico');
     const conteudoContainer = document.getElementById('conteudo-principal-dinamico');
     const nomeUtilizadorEl = document.getElementById('display-nome-utilizador');
@@ -48,7 +48,7 @@ function carregarConteudoDashboard(perfil, emailCompleto) {
     const logoLink = document.getElementById('logo-link');
 
 
-    // **VERIFICAÇÃO CRÍTICA:** Se o perfil for inválido, paramos.
+    // VERIFICAÇÃO CRÍTICA: Se o perfil for inválido, paramos.
     if (!perfil || (perfil !== 'organizador' && perfil !== 'participante')) {
         tituloHeaderEl.textContent = 'ERRO DE PERFIL';
         subtituloHeaderEl.textContent = 'O tipo de perfil (' + perfil + ') é inválido ou nulo. Verifique o login.';
@@ -74,7 +74,7 @@ function carregarConteudoDashboard(perfil, emailCompleto) {
         menuHTML = `
             <a href="dashboard.html" class="menu-item active"><i class="fas fa-home"></i><span>Início (Dashboard)</span></a>
             <a href="criar_evento.html" class="menu-item"><i class="fas fa-plus-circle"></i><span>Criar Evento</span></a>
-            <a href="gerir_eventos.html" class="menu-item"><i class="fas fa-edit"></i><span>Gerir Eventos</span></a>
+            <a href="editar_eventos.html" class="menu-item"><i class="fas fa-edit"></i><span>Editar Evento</span></a>
             <a href="relatorios.html" class="menu-item"><i class="fas fa-chart-line"></i><span>Relatórios & Vendas</span></a>
             <a href="dados_pessoais.html" class="menu-item"><i class="fas fa-user-cog"></i><span>Gestão de Perfil</span></a>
         `;
@@ -109,6 +109,7 @@ function carregarConteudoDashboard(perfil, emailCompleto) {
                 <a href="criar_evento.html" class="btn btn-primario"><i class="fas fa-plus-circle"></i> Criar Novo Evento</a>
             </div>
         `;
+
 
     } else if (perfil === 'participante') {
         // CORREÇÃO: Usar nomeBase dinâmico
@@ -202,13 +203,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let firebaseCarregado = false;
 
 auth.onAuthStateChanged(async (user) => {
-
-    if (!user) {
-        // Utilizador não autenticado
-        alert("Acesso negado. Por favor, faça login.");
-        window.location.href = "./login.html";
-        return;
-    }
 
     try {
         const uid = user.uid;

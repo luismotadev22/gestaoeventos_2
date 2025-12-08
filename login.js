@@ -1,7 +1,7 @@
 import { auth, db } from './firebase_connection.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    //  Obter referências para os elementos do DOM
+    //  Obtem os elementos do HTML
     const formLogin = document.getElementById('form-login');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
@@ -90,12 +90,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'auth/invalid-login-credentials':
                     msg = 'Erro: E-mail ou palavra-passe inválida. Tente novamente.';
                 default:
-                    msg = `Erro de login: ${error.message}`;
+                    msg = `Erro de login: Email ou Password incorreto. Tente novamente.  `;
             }
 
             mensagemErro.textContent = msg;
             mensagemErro.classList.add('erro');
-            console.error("Erro Firebase Login:", error);
         }
     });
 });

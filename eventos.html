@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos - IPCA</title>
+
+    <!-- CSS global + CSS específico da página de eventos -->
+    <link rel="stylesheet" href="estilos/principal.css">
+    <link rel="stylesheet" href="estilos/eventos.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-logo">
+                <img src="imagens/LogoIPCA.png" alt="Logotipo IPCA" height="40">
+            </a>
+
+            <nav class="navbar-menu">
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="eventos.html" class="ativo">Eventos</a></li>
+                    <li><a href="calendario.html">Calendário</a></li>
+                    <li><a href="sobre_contactos.html">Sobre</a></li>
+                </ul>
+            </nav>
+
+            <div class="navbar-login">
+                <a class="btn btn-secundario" href="login.html">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- CABEÇALHO DA PÁGINA -->
+        <section class="secao-cabecalho-eventos">
+            <div class="container">
+                <h1>Lista de Eventos</h1>
+                <p>Explora todos os eventos académicos, culturais e desportivos do IPCA.</p>
+            </div>
+        </section>
+
+        <!-- FILTROS + PESQUISA -->
+        <section class="secao-filtros-eventos">
+            <div class="container filtros-eventos">
+
+                <div class="campo-pesquisa">
+                    <label for="pesquisa-eventos">Pesquisar</label>
+                    <input
+                        type="text"
+                        id="pesquisa-eventos"
+                        placeholder="Procurar por nome, descrição ou local..."
+                    >
+                </div>
+
+                <div class="campo-filtro">
+                    <label for="filtro-tipo">Tipo de evento</label>
+                    <select id="filtro-tipo">
+                        <option value="todos">Todos os tipos</option>
+                        <option value="academico">Académico</option>
+                        <option value="cultural">Cultural</option>
+                        <option value="desportivo">Desportivo</option>
+                    </select>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- LISTA DE EVENTOS (preenchida via JS) -->
+        <section class="secao-lista-eventos">
+            <div class="container">
+                <div id="lista-eventos" class="grade-eventos">
+                    <!-- Os cartões de evento são inseridos dinamicamente pelo ficheiro eventos.js -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- RODAPÉ -->
+    <footer class="rodape">
+        <div class="container">
+            <p>IPCA © 2025 — Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Script ESPECÍFICO desta página -->
+    <script src="eventos.js"></script>
+
+    
+</body>
+</html>

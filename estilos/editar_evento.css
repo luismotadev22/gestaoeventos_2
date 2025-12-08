@@ -1,0 +1,224 @@
+:root {
+    --bg-main: #f0f2f5;       /* Fundo geral: cinza muito claro */
+    --bg-card: #ffffff;       /* Fundo de containers: branco */
+    --primary-color: #003a70; /* Azul Marinho (Cor da plataforma) */
+    --accent-color: #ffc107;  /* Amarelo/Dourado (Cor de destaque) */
+    --danger-color: #dc3545;  /* Vermelho de Perigo */
+    --text-dark: #343a40;     /* Texto padrão escuro */
+    --border-color: #e9ecef;  /* Borda suave */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-dark);
+    line-height: 1.6;
+    padding: 20px;
+}
+
+h1, h2, h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #0056b3; /* Tom ligeiramente mais claro */
+    text-decoration: underline;
+}
+
+/* =========================================
+   2. Layout Principal e Header
+   ========================================= */
+main {
+    max-width: 850px;
+    margin: 0 auto;
+    background-color: var(--bg-card);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05); /* Sombra suave, moderna */
+}
+
+header {
+    text-align: left;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+/* =========================================
+   3. Classes Utilitárias (Visibilidade)
+   ========================================= */
+.escondido {
+    display: none !important;
+}
+
+.visivel {
+    display: block !important;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* =========================================
+   4. Lista de Seleção (Modo Cartões - UI)
+   ========================================= */
+#conteudo-lista {
+    display: grid;
+    gap: 15px; 
+}
+
+.lista-item {
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-left: 5px solid var(--accent-color); /* Destaque amarelo para atração visual */
+    padding: 15px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.lista-item:hover {
+    background-color: #e9ecef; /* Feedback visual no hover (UX) */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.lista-item strong {
+    color: var(--text-dark);
+}
+
+.btn-selecionar {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.btn-selecionar:hover {
+    background-color: #002d58; 
+    text-decoration: none;
+}
+
+/* =========================================
+   5. Formulário de Edição
+   ========================================= */
+form section {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-top: 15px;
+    font-size: 0.95em;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--bg-card);
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1em;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus, textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 58, 112, 0.3); /* Sombra de foco azul */
+}
+
+/* Separador */
+hr {
+    border: 0;
+    height: 1px;
+    background: var(--border-color);
+    margin: 30px 0;
+}
+
+/* =========================================
+   6. Botões de Ação
+   ========================================= */
+button {
+    cursor: pointer;
+    font-size: 16px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    width: 100%; /* Totalmente responsivo em mobile */
+    margin-top: 15px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn-submeter {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-submeter:hover {
+    background-color: #002d58;
+}
+
+.btn-perigo {
+    background-color: var(--danger-color);
+    color: white;
+    margin-top: 20px;
+}
+
+.btn-perigo:hover {
+    background-color: #b02a37;
+}
+
+/* =========================================
+   7. Responsividade (Mobile UX)
+   ========================================= */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    main {
+        padding: 20px 15px;
+        margin: 0;
+    }
+    
+    /* Empilha itens da lista em ecrãs pequenos */
+    .lista-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+    }
+
+    .btn-selecionar {
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+}

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário de Eventos - IPCA</title>
+
+    <link rel="stylesheet" href="estilos/principal.css">
+    <link rel="stylesheet" href="estilos/calendario.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-logo">
+                <img src="imagens/LogoIPCA.png" alt="Logotipo IPCA" height="40">
+            </a>
+
+            <nav class="navbar-menu">
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="eventos.html">Eventos</a></li>
+                    <li><a href="calendario.html" class="ativo">Calendário</a></li>
+                    <li><a href="sobre_contactos.html">Sobre</a></li>
+                </ul>
+            </nav>
+
+            <div class="navbar-login">
+                <a class="btn btn-secundario" href="login.html">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- CABEÇALHO DA PÁGINA -->
+        <section class="secao-cabecalho-calendario">
+            <div class="container">
+                <h1>Calendário de Eventos</h1>
+                <p>Consulta de forma rápida em que dias acontecem os eventos académicos, culturais e desportivos.</p>
+            </div>
+        </section>
+
+        <!-- CALENDÁRIO -->
+        <section class="secao-calendario">
+            <div class="container">
+
+                <div class="calendario">
+
+                    <div class="topo-calendario">
+                        <button id="mes-anterior" class="btn-nav-calendario">&#8592;</button>
+                        <h2 id="mes-ano"></h2>
+                        <button id="mes-seguinte" class="btn-nav-calendario">&#8594;</button>
+                    </div>
+
+                    <div class="dias-semana">
+                        <span>Seg</span>
+                        <span>Ter</span>
+                        <span>Qua</span>
+                        <span>Qui</span>
+                        <span>Sex</span>
+                        <span>Sáb</span>
+                        <span>Dom</span>
+                    </div>
+
+                    <div id="grade-calendario" class="grade-calendario">
+                        <!-- Dias são gerados via JS -->
+                    </div>
+
+                    <div class="legenda-calendario">
+                        <span class="ponto-evento"></span> Dia com evento
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL DE DETALHE DE EVENTO(S) -->
+    <div id="modal-evento" class="modal oculto">
+        <div class="modal-overlay"></div>
+
+        <div class="conteudo-modal">
+            <button id="fechar-modal" class="fechar-modal">&times;</button>
+            <h2 id="modal-titulo"></h2>
+            <p id="modal-data" class="modal-data"></p>
+
+            <div id="modal-lista-eventos" class="modal-lista-eventos">
+                <!-- Lista de eventos do dia é preenchida via JS -->
+            </div>
+
+            <div class="modal-footer">
+                <button id="modal-inscrever" class="btn btn-primario">
+                    Inscrever-se
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RODAPÉ -->
+    <footer class="rodape">
+        <div class="container">
+            <p>IPCA © 2025 — Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Script ESPECÍFICO do calendário -->
+    <script src="calendario.js"></script>
+</body>
+</html>
+

@@ -108,7 +108,9 @@ main {
 }
 
 .navbar-logo img {
-    height: 40px; /* Controla o tamanho do logo */
+    height: 40px;
+    filter: brightness(2.0);
+    filter: saturate(2.0); /* Controla o tamanho do logo */
 }
 
 .navbar-menu ul {
@@ -118,7 +120,7 @@ main {
 }
 
 .navbar-menu a {
-    color: var(--cor-azul-claro);
+    color: var(--cor-azul-profundo);
     text-decoration: none;
     font-size: 17px;
     font-weight: 500;
@@ -138,7 +140,7 @@ main {
 /* ========================================= */
 .banner-principal {
     position: relative;
-    background-color: var(--cor-azul-claro); /* Cor de fallback */
+    background-color: var(--cor-azul-profundo); /* Cor de fallback */
     /* Adicione a sua imagem de banner aqui */
     background-image: url('../imagens/banner_principal.jpg'); 
     background-size: cover;
@@ -150,7 +152,7 @@ main {
 
 /* Overlay (UI) - Melhora a legibilidade do texto sobre a imagem */
 .banner-overlay {
-    background-color: var(--cor-azul-claro); /* Overlay azul profundo */
+    background-color: var(--cor-azul-profundo); /* Overlay azul profundo */
     padding: 10px 0;
 }
 
@@ -249,7 +251,7 @@ main {
 
 
 .rodape {
-    background-color: var(--cor-azul-claro);
+    background-color: var(--cor-azul-profundo);
     color: rgba(255, 255, 255, 0.8);
     text-align: center;
     padding: 30px 0;

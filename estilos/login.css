@@ -65,6 +65,7 @@ body {
 
 .login-wrapper {
     /* Centraliza o cartão vertical e horizontalmente */
+    background-color: var(--cor-cinza-fundo);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -73,28 +74,34 @@ body {
 }
 
 .login-card {
+    justify-content: center;
     background-color: var(--cor-branco);
-    padding: 40px;
+    padding: 20px 25px  20px 30px;
+    max-width: 420px;
+    width: auto;
     border-radius: 12px;
     /* Sombra elegante para dar profundidade e destaque (UX) */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
     width: 100%;
-    max-width: 420px; 
+     align-self: start;
 }
 
 .login-header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
 }
 
 .login-logo {
-    height: 60px;
-    margin-bottom: 15px;
+    height: 80px;
+    width: auto;
+    margin-bottom: 30px;
+    margin-top: 50px;
     filter: brightness(2.0);
     filter: saturate(2.0);
     text-align: center;
     align-self: start;
     align-items: center;
+    color: #001f3f;
 }
 
 .login-header h2 {
@@ -112,7 +119,6 @@ body {
 }
 
 .form-group label {
-    display: block;
     font-weight: 600;
     color: var(--cor-texto-principal);
     margin-bottom: 8px;

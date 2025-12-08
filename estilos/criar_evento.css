@@ -1,0 +1,126 @@
+:root {
+    --cor-primaria: #003366; /* Azul Escuro IPCA */
+    --cor-borda: #ddd;
+}
+
+/* --- CENTRALIZAÇÃO VERTICAL E HORIZONTAL --- */
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+.main-content {
+    display: flex; 
+    min-height: 100vh; /* Ocupa a altura total do ecrã */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    flex-direction: column; 
+    padding: 20px;
+    box-sizing: border-box; /* Garante que o padding não causa overflow */
+}
+
+/* O Container do Formulário */
+.form-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    max-width: 650px; 
+    width: 100%;
+}
+/* --- FIM CENTRALIZAÇÃO --- */
+
+.main-header h1 {
+    color: var(--cor-primaria);
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.grupo-input {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.linha-dupla {
+    display: flex;
+    gap: 20px;
+}
+
+.linha-dupla .grupo-input {
+    flex: 1; 
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--cor-primaria);
+    font-size: 14px;
+}
+
+.obrigatorio {
+    color: #dc3545; /* Vermelho alerta */
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="time"] {
+    padding: 12px;
+    border: 1px solid var(--cor-borda);
+    border-radius: 5px;
+    font-size: 15px;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    border-color: var(--cor-primaria);
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 51, 102, 0.2);
+}
+
+/* Destaque para a secção de preços */
+.destaque-financeiro-container {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+/* Destaque Bilhete Normal (Verde para sucesso) */
+.destaque-financeiro input {
+    border-left: 5px solid #28a745; 
+}
+
+/* Destaque Bilhete VIP (Amarelo/Dourado) */
+.destaque-financeiro.vip input {
+    border-left: 5px solid #ffc107; 
+}
+
+.form-actions {
+    margin-top: 30px;
+    text-align: right;
+}
+
+.btn-submeter {
+    background-color: var(--cor-primaria);
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn-submeter:hover {
+    background-color: #002244;
+}
+
+@media (max-width: 768px) {
+    .linha-dupla {
+        flex-direction: column;
+        gap: 0;
+    }
+}
