@@ -72,7 +72,7 @@ function carregarConteudoDashboard(perfil, emailCompleto) {
         subtituloHeaderEl.textContent = 'Crie os melhores eventos, workshops e conferências do IPCA!';
         
         menuHTML = `
-            <a href="dashboard.html" class="menu-item active"><i class="fas fa-home"></i><span>Início (Dashboard)</span></a>
+            <a href="dashboard.html" class="menu-item active"><i class="fas fa-home"></i><span>Menu Inicial</span></a>
             <a href="criar_evento.html" class="menu-item"><i class="fas fa-plus-circle"></i><span>Criar Evento</span></a>
             <a href="editar_eventos.html" class="menu-item"><i class="fas fa-edit"></i><span>Editar Evento</span></a>
             <a href="relatorios.html" class="menu-item"><i class="fas fa-chart-line"></i><span>Relatórios & Vendas</span></a>
@@ -117,7 +117,7 @@ function carregarConteudoDashboard(perfil, emailCompleto) {
         subtituloHeaderEl.textContent = 'Participe nos melhores eventos, workshops e conferências do IPCA!';
         
         menuHTML = `
-            <a href="dashboard.html" class="menu-item active"><i class="fas fa-home"></i><span>Início (Dashboard)</span></a>
+            <a href="dashboard.html" class="menu-item active"><i class="fas fa-home"></i><span>Menu Inicial</span></a>
             <a href="explorar_eventos.html" class="menu-item"><i class="fas fa-search"></i><span>Explorar Eventos</span></a>
             <a href="minhas_inscricoes.html" class="menu-item"><i class="fas fa-ticket-alt"></i><span>As Minhas Inscrições</span></a>
             <a href="eventos_favoritos.html" class="menu-item"><i class="fas fa-star"></i><span>Eventos Favoritos</span></a>

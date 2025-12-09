@@ -1,224 +1,333 @@
 :root {
-    --bg-main: #f0f2f5;       /* Fundo geral: cinza muito claro */
-    --bg-card: #ffffff;       /* Fundo de containers: branco */
-    --primary-color: #003a70; /* Azul Marinho (Cor da plataforma) */
-    --accent-color: #ffc107;  /* Amarelo/Dourado (Cor de destaque) */
-    --danger-color: #dc3545;  /* Vermelho de Perigo */
-    --text-dark: #343a40;     /* Texto padrão escuro */
-    --border-color: #e9ecef;  /* Borda suave */
+    --ipca-azul-principal: #003366;      /* Fundo da Sidebar, Títulos, Labels */
+    --ipca-azul-secundario: #007bff;     /* Ações, Links, Focus */
+    --ipca-acento-amarelo: #ffc107;      /* Linhas de destaque, VIP */
+    --cor-fundo-pagina: #f4f7f9;         /* Fundo da página (muito claro) */
+    --cor-card-fundo: #ffffff;           /* Fundo dos cards */
+    --cor-borda-suave: #e0e0e0;          /* Borda subtil */
+    --cor-texto-principal: #333;
+    --cor-sucesso: #28a745;              /* Verde (Preço Normal) */
+    --cor-perigo: #dc3545;               /* Vermelho (Eliminar) */
+    --cor-sombra-suave: rgba(0, 0, 0, 0.05);
 }
 
-* {
+/* Reset de Box-sizing */
+*, *::before, *::after {
     box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
     margin: 0;
-    padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--cor-fundo-pagina);
+    color: var(--cor-texto-principal);
+    line-height: 1.5;
 }
 
-body {
-    background-color: var(--bg-main);
-    color: var(--text-dark);
-    line-height: 1.6;
-    padding: 20px;
-}
+/* Classes de Visibilidade controladas pelo JS */
+.escondido { display: none !important; }
+.visivel { display: block !important; }
 
-h1, h2, h3 {
-    color: var(--primary-color);
-    margin-bottom: 15px;
-}
+/* ================================================= */
+/* 2. LAYOUT DASHBOARD                               */
+/* ================================================= */
 
-a {
-    color: var(--primary-color);
-    text-decoration: none;
-    transition: color 0.2s;
-}
-
-a:hover {
-    color: #0056b3; /* Tom ligeiramente mais claro */
-    text-decoration: underline;
-}
-
-/* =========================================
-   2. Layout Principal e Header
-   ========================================= */
-main {
-    max-width: 850px;
-    margin: 0 auto;
-    background-color: var(--bg-card);
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05); /* Sombra suave, moderna */
-}
-
-header {
-    text-align: left;
-    margin-bottom: 30px;
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 15px;
-}
-
-/* =========================================
-   3. Classes Utilitárias (Visibilidade)
-   ========================================= */
-.escondido {
-    display: none !important;
-}
-
-.visivel {
-    display: block !important;
-    animation: fadeIn 0.5s ease-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-/* =========================================
-   4. Lista de Seleção (Modo Cartões - UI)
-   ========================================= */
-#conteudo-lista {
-    display: grid;
-    gap: 15px; 
-}
-
-.lista-item {
-    background-color: var(--bg-main);
-    border: 1px solid var(--border-color);
-    border-left: 5px solid var(--accent-color); /* Destaque amarelo para atração visual */
-    padding: 15px;
-    border-radius: 6px;
+.dashboard-container {
     display: flex;
-    justify-content: space-between; 
-    align-items: center;
-    transition: background-color 0.2s, box-shadow 0.2s;
+    min-height: 100vh;
 }
 
-.lista-item:hover {
-    background-color: #e9ecef; /* Feedback visual no hover (UX) */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* SIDEBAR */
+.sidebar {
+    width: 200px; 
+    background-color: var(--ipca-azul-principal);
+    flex-shrink: 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.lista-item strong {
-    color: var(--text-dark);
+.logo-area {
+    text-align: center;
+    padding: 20 20px;
+    padding-bottom: 30px;
+    margin-bottom: 40px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
-.btn-selecionar {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 8px 15px;
-    border-radius: 4px;
-    font-weight: 600;
-}
-
-.btn-selecionar:hover {
-    background-color: #002d58; 
-    text-decoration: none;
-}
-
-/* =========================================
-   5. Formulário de Edição
-   ========================================= */
-form section {
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-label {
+.logo-ipca {
+    max-width: 140px;
+    filter: brightness(7.0);
+    filter: saturate(7.0); 
+    margin: 0 auto; 
+    height: auto;
     display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-top: 15px;
-    font-size: 0.95em;
-}
-
-input[type="text"],
-input[type="number"],
-input[type="date"],
-input[type="time"],
-textarea {
-    width: 100%;
-    padding: 10px;
-    background-color: var(--bg-card);
-    color: var(--text-dark);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    font-size: 1em;
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-input:focus, textarea:focus {
-    border-color: var(--primary-color);
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 58, 112, 0.3); /* Sombra de foco azul */
-}
-
-/* Separador */
-hr {
-    border: 0;
-    height: 1px;
-    background: var(--border-color);
-    margin: 30px 0;
-}
-
-/* =========================================
-   6. Botões de Ação
-   ========================================= */
-button {
-    cursor: pointer;
-    font-size: 16px;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 5px;
-    width: 100%; /* Totalmente responsivo em mobile */
-    margin-top: 15px;
-    font-weight: bold;
-    transition: background-color 0.3s;
-}
-
-.btn-submeter {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-.btn-submeter:hover {
-    background-color: #002d58;
-}
-
-.btn-perigo {
-    background-color: var(--danger-color);
-    color: white;
     margin-top: 20px;
 }
 
-.btn-perigo:hover {
-    background-color: #b02a37;
+.menu-item {
+    padding: 12px 15px; 
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    font-size: 0.95em;
+    transition: background-color 0.2s;
+
 }
 
-/* =========================================
-   7. Responsividade (Mobile UX)
-   ========================================= */
+.menu-item:hover {
+    background-color: #004488;
+}
+
+.menu-item i {
+    margin-right: 10px;
+}
+
+/* CONTEÚDO PRINCIPAL */
+.content-wrapper {
+    flex-grow: 1;
+    padding: 30px 50px;
+}
+
+header h1 {
+    color: var(--ipca-azul-principal);
+    font-size: 1.8em;
+    margin-bottom: 5px;
+}
+header #subtitulo-pagina {
+    color: #6c757d;
+    margin-bottom: 30px;
+}
+
+main {
+    max-width: 850px; /* Largura máxima para o conteúdo principal */
+    width: 100%;
+    margin-left: 0; /* Alinha o conteúdo à esquerda no desktop */
+}
+
+/* ================================================= */
+/* 3. LISTA DE SELEÇÃO DE EVENTOS (UX Foco)          */
+/* ================================================= */
+
+#div-selecao-evento {
+    /* Adiciona um container visual para a lista */
+    padding: 20px;
+    background-color: var(--cor-card-fundo);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px var(--cor-sombra-suave);
+}
+
+#div-selecao-evento h2 {
+    color: var(--ipca-azul-principal);
+    font-size: 1.4em;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+/* Estilo do Item Clicável (Aplica-se aos links gerados pelo JS) */
+#conteudo-lista .evento-link-lista {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    
+    border: 1px solid var(--cor-borda-suave);
+    border-radius: 6px;
+    background-color: var(--cor-card-fundo);
+    color: var(--cor-texto-principal);
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.evento-link-lista strong {
+    color: var(--ipca-azul-principal);
+    font-weight: 600;
+}
+
+.evento-link-lista:hover {
+    background-color: #f8f8f8;
+    border-color: var(--ipca-azul-secundario);
+    box-shadow: 0 4px 8px rgba(0, 51, 102, 0.1);
+}
+
+/* ================================================= */
+/* 4. FORMULÁRIO DE EDIÇÃO (Cards e Inputs)          */
+/* ================================================= */
+
+/* Card Sections para organizar o formulário */
+.card-section {
+    background-color: var(--cor-card-fundo);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px var(--cor-sombra-suave);
+    margin-bottom: 20px;
+ /* Espaçamento entre secções */
+}
+
+.card-section h3 {
+    color: var(--ipca-azul-principal);
+    border-bottom: 2px solid var(--ipca-acento-amarelo); /* Destaque Amarelo */
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Layout de Duas Colunas (Simulado através da flutuação de grupos de input) */
+.card-section > .form-group {
+    /* Faz com que os grupos de input fluam para ficarem lado a lado (em vez de usar linha-dupla) */
+    float: left;
+    width: 48%; /* Quase metade */
+    margin-right: 4%; /* Espaço entre eles */
+}
+
+.card-section > .form-group:nth-child(even) {
+    margin-right: 0;
+}
+
+/* Limpar a flutuação após a secção */
+.card-section::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Labels */
+label {
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: var(--ipca-azul-principal);
+    font-size: 0.9em;
+}
+
+/* Inputs, Textareas */
+input[type="text"], input[type="number"], input[type="date"], input[type="time"], textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--cor-borda-suave);
+    border-radius: 4px;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+input:focus, textarea:focus {
+    border-color: var(--ipca-azul-secundario);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Textarea de Oradores */
+.oradores-textarea {
+    width: 100% !important; /* Deve ocupar a largura total */
+    margin-right: 0 !important;
+}
+
+.oradores-textarea textarea {
+    min-height: 80px;
+}
+
+/* Destaque Financeiro */
+#section-precos {
+    background-color: #ffffff;
+    color: var(--cor-borda-suave);
+}
+
+.card-section#section-precos input {
+    /* Aplica a borda de cor nos inputs de preço */
+    border-left: 5px solid var(--cor-borda-suave);
+    margin-right: 15px; /* Base neutra */
+}
+
+.card-section#section-precos .form-group:first-child input {
+    border-left-color: var(--cor-borda-suave); /* Normal Price (Verde) */
+}
+
+.card-section#section-precos .form-group:last-child input {
+    border-left-color: var(--ipca-acento-amarelo); /* VIP Price (Amarelo) */
+}
+
+
+/* ================================================= */
+/* 5. AÇÕES E BOTÕES                                 */
+/* ================================================= */
+
+.botoes-acao {
+    display: flex;
+    justify-content: flex-end; 
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.btn-submeter, .btn-perigo {
+    padding: 10px 20px; 
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    color: white;
+}
+
+.btn-submeter {
+    background-color: var(--ipca-azul-principal);
+}
+
+.btn-submeter:hover {
+    background-color: #002244;
+}
+
+.btn-perigo {
+    background-color: var(--cor-perigo);
+}
+
+.btn-perigo:hover {
+    background-color: #c82333;
+}
+
+
+/* ================================================= */
+/* 6. RESPONSIVIDADE (Mobile)                        */
+/* ================================================= */
+
 @media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
-    main {
-        padding: 20px 15px;
-        margin: 0;
+    
+    .sidebar {
+        display: none; 
     }
     
-    /* Empilha itens da lista em ecrãs pequenos */
-    .lista-item {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 15px;
+    .content-wrapper {
+        padding: 20px 15px;
     }
 
-    .btn-selecionar {
+    /* Colunas transformadas em linhas */
+    .card-section > .form-group {
+        float: none;
+        width: 100%; 
+        margin-right: 0;
+    }
+
+    .card-section::after {
+        clear: none; /* Não precisamos limpar a flutuação em mobile */
+    }
+
+    /* Botões Full-width */
+    .botoes-acao {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn-submeter, .btn-perigo {
         width: 100%;
         text-align: center;
-        margin-top: 10px;
     }
 }

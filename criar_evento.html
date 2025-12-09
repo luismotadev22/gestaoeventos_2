@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar Novo Evento - IPCA</title>
     <link rel="stylesheet" href="estilos/dashboard.css">
-    <link rel="stylesheet" href="estilos/criar_evento.css"> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="estilos/criar_evento.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> 
+
 </head>
 <body>
 
@@ -15,8 +16,10 @@
             <div class="logo-area">
                 <img src="imagens/LogoIPCA.png" alt="Logo IPCA" class="logo-ipca">
             </div>
-            <nav class="menu-principal">
-                <a href="dashboard.html" class="menu-item"><i class="fas fa-arrow-left"></i><span>Voltar ao Dashboard</span></a>
+           <nav class="menu-principal">
+                <a href="dashboard.html" class="menu-item link-voltar">
+                    <i class="fas fa-arrow-left"></i><span>Voltar ao Dashboard</span>
+                </a>
             </nav>
         </aside>
 
@@ -28,6 +31,7 @@
 
             <section class="form-container">
                 <form id="form-criar-evento">
+                    
                     
                     <div class="grupo-input">
                         <label for="nomeEvento">Nome do Evento <span class="obrigatorio">*</span></label>

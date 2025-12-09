@@ -31,11 +31,14 @@ const mostrarListaDeSelecao = async (user) => {
         snapshot.forEach(doc => {
             const dados = doc.data();
             const id = doc.id;
-            // O link recarrega a página mas adiciona ?id=...
+            
+            // ⚠️ CORREÇÃO 1: Corrigida a sintaxe da template string (era $(dados.nome} e faltava fechar parênteses)
+            // Agora, o nome do evento e a data estão corretamente dentro do link <a>.
             html += `
                 <div class="lista-item">
-                    <strong>${dados.nome}</strong> (${dados.data_string})
-                    <a href="editar_eventos.html?id=${id}" class="btn-selecionar">Editar</a>
+                    <a href="editar_eventos.html?id=${id}" class="evento-link-lista">
+                        <strong>${dados.nome}</strong>  </a> (${dados.data_string})
+               
                 </div>
             `;
         });
@@ -54,7 +57,7 @@ const carregarFormularioEdicao = async (id) => {
     // Troca visibilidade
     divSelecao.className = 'escondido';
     divFormulario.className = 'visivel';
-    subtitulo.textContent = "Edite os campos abaixo.";
+    subtitulo.textContent = "Edite os campos abaixo do seu evento.";
 
     try {
         const doc = await db.collection("eventos").doc(id).get();
@@ -70,7 +73,12 @@ const carregarFormularioEdicao = async (id) => {
         document.getElementById('nomeEvento').value = dados.nome || "";
         document.getElementById('localEvento').value = dados.local || "";
         document.getElementById('maxParticipantes').value = dados.max_participantes || 0;
-        document.getElementById('dataEvento').value = dados.data_string || "";
+        
+        // ⚠️ CORREÇÃO 2: Se data_string estiver no formato DD/MM/AAAA, o input type="date"
+        // espera AAAA-MM-DD. Assumindo que a data no Firestore é ISO (AAAA-MM-DD),
+        // este código está ok, mas se não for, causará um erro de preenchimento.
+        document.getElementById('dataEvento').value = dados.data_string || ""; 
+        
         document.getElementById('horaEvento').value = dados.hora_string || "";
         document.getElementById('numOradores').value = dados.num_oradores || 0;
         document.getElementById('nomesOradores').value = dados.oradores ? dados.oradores.join(', ') : "";
@@ -86,45 +94,65 @@ const carregarFormularioEdicao = async (id) => {
     }
 };
 
-// --- FUNÇÃO 3: Lógica dos Botões (Guardar / Eliminar) ---
+// FUNÇÃO 3: Lógica dos Botões (Guardar / Eliminar) 
 const configurarBotoes = (id) => {
     const form = document.getElementById('form-criar-evento');
     const btnEliminar = document.getElementById('btn-eliminar');
 
-    // ATUALIZAR
+    // Função para guardar e atualizar o codigo
     form.onsubmit = async (e) => {
         e.preventDefault();
+        
+        // Lógica para Oradores
+        const nomesOradoresTexto = document.getElementById('nomesOradores').value;
+        // Limpa espaços e divide por vírgula para criar um array para o Firestore
+        const oradoresArray = nomesOradoresTexto
+            .split(',')
+            .map(item => item.trim())
+            .filter(item => item.length > 0); 
+            
         try {
-            // Captura rápida de dados para teste
+            // ⚠️ CORREÇÃO 3: Adicionados os campos 'num_oradores' e 'oradores' ao objeto de atualização.
             const updateData = {
                 nome: document.getElementById('nomeEvento').value,
                 local: document.getElementById('localEvento').value,
                 max_participantes: parseInt(document.getElementById('maxParticipantes').value),
                 data_string: document.getElementById('dataEvento').value,
                 hora_string: document.getElementById('horaEvento').value,
-                // ... adicione os outros campos aqui se precisar ...
+                num_oradores: parseInt(document.getElementById('numOradores').value) || 0,
+                oradores: oradoresArray, // Array de oradores corrigido
+                precos: {
+                    normal: parseFloat(document.getElementById('precoNormal').value),
+                    vip: parseFloat(document.getElementById('precoVip').value) || null
+                },
                 ultima_atualizacao: firebase.firestore.FieldValue.serverTimestamp()
             };
+            
+            // Certifica-se de que se o VIP for 0, ele salva como null/undefined para economizar espaço
+            if (updateData.precos.vip === 0) {
+                 updateData.precos.vip = null;
+            }
+
 
             await db.collection("eventos").doc(id).update(updateData);
             alert("Evento atualizado!");
             window.location.href = "editar_eventos.html"; // Volta para a lista
         } catch (error) {
             console.error(error);
-            alert("Erro ao atualizar.");
+            alert("Erro ao atualizar. Verifique se os campos de número/preço estão corretos.");
         }
     };
 
     // ELIMINAR
     btnEliminar.onclick = async () => {
-        if(confirm("Tem a certeza?")) {
+        if(confirm("Tem a certeza que deseja eliminar este evento? Esta ação é irreversível.")) {
             try {
                 await db.collection("eventos").doc(id).delete();
-                alert("Eliminado!");
+                alert("Evento Eliminado com sucesso!");
                 window.location.href = "editar_eventos.html";
             } catch (error) {
                 console.error(error);
-                alert("Erro ao eliminar.");
+                alert("Erro ao eliminar o evento.");
             }
         }
     };

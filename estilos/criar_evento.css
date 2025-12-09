@@ -1,101 +1,193 @@
 :root {
-    --cor-primaria: #003366; /* Azul Escuro IPCA */
-    --cor-borda: #ddd;
+    --ipca-azul-principal: #003366;      /* Fundo da Sidebar, Títulos, Labels */
+    --ipca-azul-secundario: #007bff;     /* Ações, Links, Hover */
+    --ipca-acento-amarelo: #ffc107;      /* Linhas de destaque, VIP */
+    --cor-fundo-pagina: #f4f7f9;         /* Fundo da página (Muito claro) */
+    --cor-card-fundo: #ffffff;           /* Fundo do formulário */
+    --cor-borda-suave: #e0e0e0;          /* Borda subtil */
+    --cor-texto-principal: #333;
+    --cor-sucesso: #28a745;              /* Verde (Preço Normal) */
+    --cor-perigo: #dc3545;               /* Vermelho (Obrigatório) */
+    --cor-sombra-suave: rgba(0, 0, 0, 0.08);
 }
 
-/* --- CENTRALIZAÇÃO VERTICAL E HORIZONTAL --- */
+/* Base Global */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body, html {
     height: 100%;
     margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--cor-fundo-pagina);
+    color: var(--cor-texto-principal);
+    line-height: 1.5;
 }
 
+/* Indicador de campo obrigatório */
+.obrigatorio {
+    color: var(--cor-perigo);
+    font-size: 1.1em;
+}
+
+/* ================================================= */
+/* 2. LAYOUT PRINCIPAL E HEADER                      */
+/* ================================================= */
+
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar e Menus (Baseado no seu padrão) */
+.sidebar {
+    width: 200px; 
+    flex-shrink: 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+.logo-area {
+    padding: 20px 0;
+    text-align: center;
+}
+
+.logo-ipca {
+    width: 70%;
+    max-width: 120px;
+}
+
+.menu-item {
+    padding: 12px 15px;
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    font-size: 0.95em;
+    transition: background-color 0.2s;
+}
+
+.menu-item:hover {
+    background-color: #004488;
+}
+
+.menu-item i {
+    margin-right: 10px;
+}
+/* Conteúdo Principal */
 .main-content {
-    display: flex; 
-    min-height: 100vh; /* Ocupa a altura total do ecrã */
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center; /* Centraliza verticalmente */
-    flex-direction: column; 
-    padding: 20px;
-    box-sizing: border-box; /* Garante que o padding não causa overflow */
+    flex-grow: 1;
+    padding: 30px 50px;
 }
 
-/* O Container do Formulário */
-.form-container {
-    background-color: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    max-width: 650px; 
-    width: 100%;
+.main-header {
+    max-width: 800px; 
+    margin: 0 auto 20px auto; 
 }
-/* --- FIM CENTRALIZAÇÃO --- */
 
 .main-header h1 {
-    color: var(--cor-primaria);
-    font-size: 24px;
+    color: var(--ipca-azul-principal);
+    font-size: 1.8em;
     margin-bottom: 5px;
 }
+.main-header p {
+    color: #6c757d;
+}
 
+/* ================================================= */
+/* 3. FORMULÁRIO (Elegante e Focado)                 */
+/* ================================================= */
+
+/* Form Container como um Card Único */
+.form-container {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto; /* Centraliza */
+    
+    background-color: var(--cor-card-fundo);
+    padding: 30px; 
+    border-radius: 10px;
+    box-shadow: 0 4px 12px var(--cor-sombra-suave); 
+}
+
+/* Agrupamento de Inputs (Para campos de linha única) */
 .grupo-input {
-    margin-bottom: 20px;
+    margin-bottom: 20px; /* Espaçamento vertical generoso */
     display: flex;
     flex-direction: column;
 }
 
+/* Layout de Duas Colunas (Flexbox) */
 .linha-dupla {
     display: flex;
     gap: 20px;
+    margin-bottom: 20px; /* Aplica o espaçamento na linha */
 }
 
 .linha-dupla .grupo-input {
     flex: 1; 
+    margin-bottom: 0; /* Remove a margem vertical interna, pois já está no .linha-dupla */
 }
 
+/* Inputs, Labels e Placeholders */
 label {
-    font-weight: 600;
+    font-weight: 600; /* Mais destaque para o label */
     margin-bottom: 8px;
-    color: var(--cor-primaria);
-    font-size: 14px;
+    color: var(--ipca-azul-principal);
+    font-size: 0.95em;
 }
 
-.obrigatorio {
-    color: #dc3545; /* Vermelho alerta */
-}
-
-input[type="text"],
-input[type="number"],
-input[type="date"],
-input[type="time"] {
+input[type="text"], input[type="number"], input[type="date"], input[type="time"] {
     padding: 12px;
-    border: 1px solid var(--cor-borda);
-    border-radius: 5px;
-    font-size: 15px;
-    transition: border-color 0.3s;
+    border: 1px solid var(--cor-borda-suave);
+    border-radius: 4px;
+    font-size: 1em;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 input:focus {
-    border-color: var(--cor-primaria);
+    border-color: var(--ipca-azul-secundario);
     outline: none;
-    box-shadow: 0 0 5px rgba(0, 51, 102, 0.2);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15); /* Focus Ring suave */
 }
 
-/* Destaque para a secção de preços */
+/* ================================================= */
+/* 4. SEÇÃO DE PREÇOS (Destaque e Hints)             */
+/* ================================================= */
+
+/* Container de Destaque Financeiro - Estilo subtil, sem card separado */
 .destaque-financeiro-container {
-    background-color: #f8f9fa;
-    padding: 15px;
+    /* Usamos a classe para isolar e dar um toque visual, se necessário */
+    padding: 15px; 
+    border: 1px dashed var(--cor-borda-suave); /* Borda tracejada para separação suave */
     border-radius: 8px;
-    border: 1px solid #e9ecef;
+    background-color: #fcfcfc; /* Fundo quase branco para o grupo de preços */
 }
 
-/* Destaque Bilhete Normal (Verde para sucesso) */
+/* Linhas verticais de cor para distinguir preços */
 .destaque-financeiro input {
-    border-left: 5px solid #28a745; 
+    border-left: 5px solid var(--cor-borda-suave); 
+    padding-left: 10px; /* Espaço para o texto não tocar na borda colorida */
 }
 
-/* Destaque Bilhete VIP (Amarelo/Dourado) */
-.destaque-financeiro.vip input {
-    border-left: 5px solid #ffc107; 
+.destaque-financeiro input#precoNormal {
+    border-left-color: var(--cor-sucesso); /* Verde: Normal */
 }
+
+.destaque-financeiro.vip input#precoVip {
+    border-left-color: var(--ipca-acento-amarelo); /* Amarelo: VIP */
+}
+
+/* Texto de ajuda */
+small {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.8em;
+    color: #6c757d;
+}
+
+/* ================================================= */
+/* 5. AÇÕES E BOTÕES                                 */
+/* ================================================= */
 
 .form-actions {
     margin-top: 30px;
@@ -103,24 +195,53 @@ input:focus {
 }
 
 .btn-submeter {
-    background-color: var(--cor-primaria);
+    background-color: var(--ipca-azul-principal);
     color: white;
-    padding: 12px 30px;
+    padding: 15px 15px; /* Botão mais proeminente */
     border: none;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 700;
     transition: background-color 0.3s;
+    letter-spacing: 0.5px;
 }
 
 .btn-submeter:hover {
     background-color: #002244;
 }
 
+/* ================================================= */
+/* 6. RESPONSIVIDADE (Mobile)                        */
+/* ================================================= */
+
 @media (max-width: 768px) {
+    
+    .sidebar {
+        display: none; 
+    }
+    
+    .main-content {
+        padding: 20px 15px;
+    }
+
+    .form-container {
+        padding: 20px 15px; 
+        box-shadow: none; /* Remove a sombra em mobile para uma experiência nativa */
+    }
+
+    /* Colunas transformadas em linhas */
     .linha-dupla {
         flex-direction: column;
         gap: 0;
+        margin-bottom: 0;
+    }
+
+    .linha-dupla .grupo-input {
+        margin-bottom: 20px;
+    }
+
+    .btn-submeter {
+        width: 100%;
     }
 }

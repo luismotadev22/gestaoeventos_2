@@ -43,7 +43,7 @@ html, body {
 /* =========================================== */
 .sidebar {
     width: 260px;
-    background-color: var(--cor-azul-profundo);
+    background-color: var(--cor-azul-profundo); 
     color: var(--cor-texto-claro);
     display: flex;
     flex-direction: column;
@@ -91,7 +91,7 @@ html, body {
 }
 
 .menu-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--cor-azul-profundo);
 }
 
 .menu-item.active {
@@ -319,3 +319,4 @@ html, body {
 .dashboard-container.sidebar-recolhida .menu-item {
     justify-content: center;
 }
+

@@ -4,38 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Evento | IPCA Gestão</title>
-    <link rel="stylesheet" href="editar_evento.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> 
+    <link rel="stylesheet" href="./estilos/editar_evento.css"> 
 </head>
 <body>
 
-    <div id="layout-container">
+    <div class="dashboard-container">
         
-        <aside id="sidebar">
-            <div class="logo">IPCA</div> <nav>
+        <aside class="sidebar" style="background-color: #003366;"> 
+            <div class="logo-area">
+                <img src="imagens/LogoIPCA.png" alt="Logo IPCA" class="logo-ipca">
+                </div>
+            
+            <nav class="menu-principal">
                 <a href="dashboard.html" class="menu-item link-voltar">
-                    <span class="icon">⬅️</span> Voltar ao Dashboard
+                    <i class="fas fa-arrow-left"></i><span>Voltar ao Dashboard</span>
                 </a>
             </nav>
         </aside>
         
-        <div id="content-wrapper">
+        <div class="content-wrapper">
             
             <header>
                 <h1>✏️ Editar Evento</h1>
-                <p id="subtitulo-pagina">Altere os campos e clique em 'Guardar Alterações'.</p>
+                <p id="subtitulo-pagina">Selecione um evento para edição ou altere os campos abaixo.</p>
             </header>
 
             <main>
                 <div id="div-selecao-evento" class="escondido">
-                    <h2>Selecione o Evento a Editar:</h2>
-                    <div id="conteudo-lista"></div>
+                    <h2>Eventos Criados:</h2>
+                    <div id="conteudo-lista">A carregar a sua lista...</div>
                 </div>
 
                 <div id="div-formulario-edicao" class="escondido">
                     <form id="form-criar-evento">
                         
                         <section class="card-section" id="section-detalhes">
-                            <h3>Detalhes do Evento</h3>
+                            <h3>Detalhes Básicos</h3>
                             <div class="form-group"><label for="nomeEvento">Nome do Evento:</label> <input type="text" id="nomeEvento" required></div>
                             <div class="form-group"><label for="localEvento">Local:</label> <input type="text" id="localEvento" required></div>
                             <div class="form-group"><label for="maxParticipantes">Máximo de Participantes:</label> <input type="number" id="maxParticipantes" required></div>
@@ -43,12 +48,12 @@
                         
                         <section class="card-section" id="section-data">
                             <h3>Data e Hora</h3>
-                            <div class="form-group"><label for="dataEvento">Data (dd/mm/yyyy):</label> <input type="date" id="dataEvento" required></div>
-                            <div class="form-group"><label for="horaEvento">Hora (hh:mm):</label> <input type="time" id="horaEvento" required></div>
+                            <div class="form-group"><label for="dataEvento">Data (DD/MM/ANO):</label> <input type="date" id="dataEvento" required></div>
+                            <div class="form-group"><label for="horaEvento">Hora (HH:MM):</label> <input type="time" id="horaEvento" required></div>
                         </section>
 
                         <section class="card-section" id="section-oradores">
-                            <h3>Oradores</h3>
+                            <h3>Informação dos Oradores</h3>
                             <div class="form-group"><label for="numOradores">Número de Oradores:</label> <input type="number" id="numOradores"></div>
                             <div class="form-group oradores-textarea">
                                 <label for="nomesOradores">Nomes dos Oradores (separados por vírgula):</label> 
@@ -78,7 +83,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <script type="module" src="./firebase_connection.js"></script>
-    <script type="module" src="./editar_evento.js"></script>
+    <script type="module" src="./editar_eventos.js"></script>
 
 </body>
 </html>
