@@ -1,22 +1,33 @@
 :root {
-    --ipca-azul-principal: #003366;      /* Fundo da Sidebar, Títulos, Labels */
-    --ipca-azul-secundario: #007bff;     /* Ações, Links, Focus */
-    --ipca-acento-amarelo: #ffc107;      /* Linhas de destaque, VIP */
-    --cor-fundo-pagina: #f4f7f9;         /* Fundo da página (muito claro) */
-    --cor-card-fundo: #ffffff;           /* Fundo dos cards */
-    --cor-borda-suave: #e0e0e0;          /* Borda subtil */
+    --ipca-azul-principal: #003366;
+    /* Fundo da Sidebar, Títulos, Labels */
+    --ipca-azul-secundario: #007bff;
+    /* Ações, Links, Focus */
+    --ipca-acento-amarelo: #ffc107;
+    /* Linhas de destaque, VIP */
+    --cor-fundo-pagina: #f4f7f9;
+    /* Fundo da página (muito claro) */
+    --cor-card-fundo: #ffffff;
+    /* Fundo dos cards */
+    --cor-borda-suave: #e0e0e0;
+    /* Borda subtil */
     --cor-texto-principal: #333;
-    --cor-sucesso: #28a745;              /* Verde (Preço Normal) */
-    --cor-perigo: #dc3545;               /* Vermelho (Eliminar) */
+    --cor-sucesso: #28a745;
+    /* Verde (Preço Normal) */
+    --cor-perigo: #dc3545;
+    /* Vermelho (Eliminar) */
     --cor-sombra-suave: rgba(0, 0, 0, 0.05);
 }
 
 /* Reset de Box-sizing */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
-body, html {
+body,
+html {
     height: 100%;
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -26,8 +37,13 @@ body, html {
 }
 
 /* Classes de Visibilidade controladas pelo JS */
-.escondido { display: none !important; }
-.visivel { display: block !important; }
+.escondido {
+    display: none !important;
+}
+
+.visivel {
+    display: block !important;
+}
 
 /* ================================================= */
 /* 2. LAYOUT DASHBOARD                               */
@@ -40,7 +56,7 @@ body, html {
 
 /* SIDEBAR */
 .sidebar {
-    width: 200px; 
+    width: 200px;
     background-color: var(--ipca-azul-principal);
     flex-shrink: 0;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -57,15 +73,15 @@ body, html {
 .logo-ipca {
     max-width: 140px;
     filter: brightness(7.0);
-    filter: saturate(7.0); 
-    margin: 0 auto; 
+    filter: saturate(7.0);
+    margin: 0 auto;
     height: auto;
     display: block;
     margin-top: 20px;
 }
 
 .menu-item {
-    padding: 12px 15px; 
+    padding: 12px 15px;
     color: white;
     text-decoration: none;
     display: flex;
@@ -94,15 +110,18 @@ header h1 {
     font-size: 1.8em;
     margin-bottom: 5px;
 }
+
 header #subtitulo-pagina {
     color: #6c757d;
     margin-bottom: 30px;
 }
 
 main {
-    max-width: 850px; /* Largura máxima para o conteúdo principal */
+    max-width: 850px;
+    /* Largura máxima para o conteúdo principal */
     width: 100%;
-    margin-left: 0; /* Alinha o conteúdo à esquerda no desktop */
+    margin-left: 0;
+    /* Alinha o conteúdo à esquerda no desktop */
 }
 
 /* ================================================= */
@@ -132,7 +151,7 @@ main {
     text-decoration: none;
     padding: 15px 20px;
     margin-bottom: 10px;
-    
+
     border: 1px solid var(--cor-borda-suave);
     border-radius: 6px;
     background-color: var(--cor-card-fundo);
@@ -164,12 +183,13 @@ main {
     border-radius: 8px;
     box-shadow: 0 1px 3px var(--cor-sombra-suave);
     margin-bottom: 20px;
- /* Espaçamento entre secções */
+    /* Espaçamento entre secções */
 }
 
 .card-section h3 {
     color: var(--ipca-azul-principal);
-    border-bottom: 2px solid var(--ipca-acento-amarelo); /* Destaque Amarelo */
+    border-bottom: 2px solid var(--ipca-acento-amarelo);
+    /* Destaque Amarelo */
     padding-bottom: 5px;
     margin-bottom: 15px;
     font-size: 1.2em;
@@ -182,14 +202,20 @@ main {
 }
 
 /* Layout de Duas Colunas (Simulado através da flutuação de grupos de input) */
-.card-section > .form-group {
+.card-section>.form-group {
     /* Faz com que os grupos de input fluam para ficarem lado a lado (em vez de usar linha-dupla) */
     float: left;
-    width: 48%; /* Quase metade */
-    margin-right: 4%; /* Espaço entre eles */
+    width: 48%;
+    /* Quase metade */
+    margin-right: 4%;
+    /* Espaço entre eles */
 }
 
-.card-section > .form-group:nth-child(even) {
+.card-section>.form-group:nth-of-type(3n) {
+    clear: both; /* Garante que 3 colunas por linha forçam nova linha */
+}
+
+.card-section>.form-group:nth-of-type(2n) {
     margin-right: 0;
 }
 
@@ -209,7 +235,11 @@ label {
 }
 
 /* Inputs, Textareas */
-input[type="text"], input[type="number"], input[type="date"], input[type="time"], textarea {
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+textarea {
     width: 100%;
     padding: 10px 12px;
     border: 1px solid var(--cor-borda-suave);
@@ -219,7 +249,8 @@ input[type="text"], input[type="number"], input[type="date"], input[type="time"]
     transition: border-color 0.3s;
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
     border-color: var(--ipca-azul-secundario);
     outline: none;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
@@ -227,8 +258,11 @@ input:focus, textarea:focus {
 
 /* Textarea de Oradores */
 .oradores-textarea {
-    width: 100% !important; /* Deve ocupar a largura total */
+    width: 100% !important;
+    /* Deve ocupar a largura total */
     margin-right: 0 !important;
+    float: none !important; /* Certifica-se de que não flutua */
+    clear: both;
 }
 
 .oradores-textarea textarea {
@@ -244,15 +278,18 @@ input:focus, textarea:focus {
 .card-section#section-precos input {
     /* Aplica a borda de cor nos inputs de preço */
     border-left: 5px solid var(--cor-borda-suave);
-    margin-right: 15px; /* Base neutra */
+    margin-right: 15px;
+    /* Base neutra */
 }
 
 .card-section#section-precos .form-group:first-child input {
-    border-left-color: var(--cor-borda-suave); /* Normal Price (Verde) */
+    border-left-color: var(--cor-sucesso);
+    /* Normal Price (Verde) */
 }
 
 .card-section#section-precos .form-group:last-child input {
-    border-left-color: var(--ipca-acento-amarelo); /* VIP Price (Amarelo) */
+    border-left-color: var(--ipca-acento-amarelo);
+    /* VIP Price (Amarelo) */
 }
 
 
@@ -262,13 +299,14 @@ input:focus, textarea:focus {
 
 .botoes-acao {
     display: flex;
-    justify-content: flex-end; 
+    justify-content: flex-end;
     gap: 10px;
     margin-top: 30px;
 }
 
-.btn-submeter, .btn-perigo {
-    padding: 10px 20px; 
+.btn-submeter,
+.btn-perigo {
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     font-size: 15px;
@@ -294,30 +332,143 @@ input:focus, textarea:focus {
     background-color: #c82333;
 }
 
+/* ================================================= */
+/* 6. ESTILOS GLOBAIS DE POPUP (Modal Centrado)      */
+/* (Movido da media query para ser global)       */
+/* ================================================= */
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55); /* Fundo semi-transparente */
+    display: flex;
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+    z-index: 9999; /* Garante que está no topo */
+}
+
+/* Caixa do Popup */
+.popup-box {
+    background: var(--cor-card-fundo);
+    padding: 28px;
+    border-radius: 12px;
+    width: 92%;
+    max-width: 420px;
+    text-align: center;
+    color: var(--cor-texto-principal);
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.1);
+    animation: popupEntrada 0.22s ease-out; /* Mantive a animação */
+}
+
+/* Animação suave (global) */
+@keyframes popupEntrada {
+    from {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.popup-box h3 {
+    color: var(--ipca-azul-principal);
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.3em;
+}
+
+.popup-box p {
+    margin-bottom: 20px;
+    font-size: 0.95em;
+    color: #444;
+}
+
+/* Botões do Popup */
+.popup-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+/* Estilos dos Botões do Popup (Unificado e Global) */
+.popup-buttons .btn-danger,
+.popup-buttons .btn-secondary,
+.popup-buttons .btn-primary {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+    width: 48%; /* Para ficarem lado a lado (Confirmação/Cancelar) */
+}
+
+.btn-danger {
+    background: var(--cor-perigo);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #b02a37;
+}
+
+.btn-secondary {
+    background: #d6d6d6;
+    color: var(--ipca-azul-secundario);
+}
+
+.btn-secondary:hover {
+    background: #c2c2c2;
+}
+
+.btn-primary {
+    background: var(--ipca-azul-secundario);
+    color: white;
+    border-radius: 6px;
+    /* Ajuste de largura para o popup simples de OK */
+    width: auto !important;
+    padding: 10px 25px;
+}
+
+.btn-primary:hover {
+    background: #0066d4;
+}
+
 
 /* ================================================= */
-/* 6. RESPONSIVIDADE (Mobile)                        */
+/* 7. RESPONSIVIDADE (Mobile)                        */
 /* ================================================= */
 
 @media (max-width: 768px) {
-    
+
     .sidebar {
-        display: none; 
+        display: none;
     }
-    
+
     .content-wrapper {
         padding: 20px 15px;
     }
 
     /* Colunas transformadas em linhas */
-    .card-section > .form-group {
+    .card-section>.form-group {
         float: none;
-        width: 100%; 
+        width: 100%;
+        margin-right: 0;
+    }
+    
+    .card-section>.form-group:nth-of-type(2n),
+    .card-section>.form-group:nth-of-type(3n) {
         margin-right: 0;
     }
 
     .card-section::after {
-        clear: none; /* Não precisamos limpar a flutuação em mobile */
+        clear: none;
+        /* Não precisamos limpar a flutuação em mobile */
     }
 
     /* Botões Full-width */
@@ -326,8 +477,31 @@ input:focus, textarea:focus {
         gap: 10px;
     }
 
-    .btn-submeter, .btn-perigo {
+    .btn-submeter,
+    .btn-perigo {
         width: 100%;
         text-align: center;
     }
+    
+    /* Pop-up em Mobile - Apenas para garantir que não há conflito */
+    .popup-box {
+        /* Remove a animação para dispositivos mais fracos */
+        animation: none; 
+    }
+    
+    /* Botões de popup em Mobile devem manter 48% ou ir para 100% se necessário */
+    .popup-buttons {
+        justify-content: space-between;
+    }
+
+    .popup-buttons .btn-danger,
+    .popup-buttons .btn-secondary,
+    .popup-buttons .btn-primary {
+        width: 48%; 
+    }
+    
+    .btn-primary {
+        width: 100% !important; /* Faz o botão OK ocupar 100% no popup de info em mobile */
+    }
+
 }

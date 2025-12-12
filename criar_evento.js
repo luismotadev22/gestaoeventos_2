@@ -12,18 +12,56 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+
+function setValidacaoNumero(input, min, msg) {
+    input.addEventListener('input', () => {
+        const valor = input.value.trim();
+
+        // reset
+        input.setCustomValidity("");
+
+        if (valor === "") {
+            if (input.hasAttribute('required')) {
+                input.setCustomValidity("Por favor, preencha este campo.");
+            }
+        } else if (!isNaN(parseFloat(valor)) && parseFloat(valor) < min) {
+            input.setCustomValidity(msg);
+        } else {
+            input.setCustomValidity(""); // válido
+        }
+
+        // Atualiza a mensagem visual imediatamente
+        input.reportValidity();
+    });
+}
+
+    // Captura os inputs
+    const maxParticipantes = document.getElementById('maxParticipantes');
+    const numOradores = document.getElementById('numOradores');
+    const precoNormal = document.getElementById('precoNormal');
+    const precoVip = document.getElementById('precoVip');
+
+    // Configura validação personalizada
+    
+    setValidacaoNumero(maxParticipantes, 1, "O máximo de participantes deve ser pelo menos 1.");
+    setValidacaoNumero(numOradores, 0, "O número de oradores não pode ser negativo.");
+    setValidacaoNumero(precoNormal, 0, "O preço normal não pode ser negativo.");
+    setValidacaoNumero(precoVip, 0, "O preço VIP não pode ser negativo.");
+
+    
+
     // Submeter o Formulário
     form.addEventListener('submit', async (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
 
         const user = auth.currentUser;
-        if (!user) return; 
+        if (!user) return;
 
         // 1. Capturar valores dos campos GERAIS
         const nome = document.getElementById('nomeEvento').value;
         const local = document.getElementById('localEvento').value;
         const maxParticipantes = parseInt(document.getElementById('maxParticipantes').value);
-        
+
         // Data e Hora combinadas
         const dataStr = document.getElementById('dataEvento').value;
         const horaStr = document.getElementById('horaEvento').value;
@@ -31,11 +69,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Oradores
         const numOradores = parseInt(document.getElementById('numOradores').value) || 0;
+
+        let mensagemErro = null;
+
+        if (numOradores < 0) {
+            mensagemErro = "O número de oradores não pode ser negativo.";
+        }
+
         const nomesOradoresTexto = document.getElementById('nomesOradores').value;
-        
+
         // --- Captura dos Preços (Normal e VIP) ---
         const precoNormal = parseFloat(document.getElementById('precoNormal').value);
-        
+
         const precoVipInput = document.getElementById('precoVip').value;
         const precoVip = precoVipInput !== "" ? parseFloat(precoVipInput) : null;
 
@@ -75,10 +120,29 @@ document.addEventListener('DOMContentLoaded', () => {
             
             btn.textContent = "A publicar...";
             btn.disabled = true;
+            if (!nome) {
+                mensagemErro = "O Nome do Evento é obrigatório.";
+            } else if (!local) {
+                mensagemErro = "A Localização / Morada é obrigatória.";
+            } else if (isNaN(maxParticipantes) || maxParticipantes <= 0) {
+                mensagemErro = "O Máximo de Participantes deve ser um número válido e positivo.";
+            } else if (!dataStr) {
+                mensagemErro = "A Data do Evento é obrigatória.";
+            } else if (!horaStr) {
+                mensagemErro = "A Hora do Evento é obrigatória.";
+            } else if (isNaN(precoNormal) || precoNormal <= 0) {
+                mensagemErro = "O Preço Bilhete Normal deve ser um valor válido e positivo.";
+            }
+
+            // SE HOUVER ERRO DE VALIDAÇÃO: Pára o processo e notifica o utilizador.
+            if (mensagemErro) {
+                showNotification(`🛑 Erro de Validação: ${mensagemErro}`, 'error');
+                return; // *** Pára a submissão AQUI. ***
+            }
 
             await db.collection("eventos").add(novoEvento);
 
-            alert("Sucesso! O evento foi criado e publicado.");
+            //alert("Sucesso! O evento foi criado e publicado.");
             window.location.href = "dashboard.html"; 
 
         } catch (error) {

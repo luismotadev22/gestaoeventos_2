@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Evento | IPCA Gestão</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> 
-    <link rel="stylesheet" href="./estilos/editar_evento.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="./estilos/editar_evento.css">
 </head>
+
 <body>
 
     <div class="dashboard-container">
-        
-        <aside class="sidebar" style="background-color: #003366;"> 
+
+        <aside class="sidebar" style="background-color: #003366;">
             <div class="logo-area">
                 <img src="imagens/LogoIPCA.png" alt="Logo IPCA" class="logo-ipca">
-                </div>
-            
+            </div>
+
             <nav class="menu-principal">
                 <a href="dashboard.html" class="menu-item link-voltar">
                     <i class="fas fa-arrow-left"></i><span>Voltar ao Dashboard</span>
                 </a>
             </nav>
         </aside>
-        
+
         <div class="content-wrapper">
-            
+
             <header>
                 <h1>✏️ Editar Evento</h1>
                 <p id="subtitulo-pagina">Selecione um evento para edição ou altere os campos abaixo.</p>
@@ -38,33 +40,57 @@
 
                 <div id="div-formulario-edicao" class="escondido">
                     <form id="form-criar-evento">
-                        
+
                         <section class="card-section" id="section-detalhes">
                             <h3>Detalhes Básicos</h3>
-                            <div class="form-group"><label for="nomeEvento">Nome do Evento:</label> <input type="text" id="nomeEvento" required></div>
-                            <div class="form-group"><label for="localEvento">Local:</label> <input type="text" id="localEvento" required></div>
-                            <div class="form-group"><label for="maxParticipantes">Máximo de Participantes:</label> <input type="number" id="maxParticipantes" required></div>
+                            <div class="form-group">
+                                <label for="nomeEvento">Nome do Evento:</label>
+                                <input type="text" id="nomeEvento" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="localEvento">Local:</label>
+                                <input type="text" id="localEvento" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="maxParticipantes">Máximo de Participantes:</label>
+                                <input type="number" id="maxParticipantes" required>
+                            </div>
                         </section>
-                        
+
                         <section class="card-section" id="section-data">
                             <h3>Data e Hora</h3>
-                            <div class="form-group"><label for="dataEvento">Data (DD/MM/ANO):</label> <input type="date" id="dataEvento" required></div>
-                            <div class="form-group"><label for="horaEvento">Hora (HH:MM):</label> <input type="time" id="horaEvento" required></div>
+                            <div class="form-group">
+                                <label for="dataEvento">Data (DD/MM/ANO):</label>
+                                <input type="date" id="dataEvento" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="horaEvento">Hora (HH:MM):</label>
+                                <input type="time" id="horaEvento" required>
+                            </div>
                         </section>
 
                         <section class="card-section" id="section-oradores">
                             <h3>Informação dos Oradores</h3>
-                            <div class="form-group"><label for="numOradores">Número de Oradores:</label> <input type="number" id="numOradores"></div>
+                            <div class="form-group">
+                                <label for="numOradores">Número de Oradores:</label>
+                                <input type="number" id="numOradores">
+                            </div>
                             <div class="form-group oradores-textarea">
-                                <label for="nomesOradores">Nomes dos Oradores (separados por vírgula):</label> 
+                                <label for="nomesOradores">Nomes dos Oradores (separados por vírgula):</label>
                                 <textarea id="nomesOradores"></textarea>
                             </div>
                         </section>
-                        
+
                         <section class="card-section" id="section-precos">
                             <h3>Preços dos Bilhetes (€)</h3>
-                            <div class="form-group"><label for="precoNormal">Preço Normal:</label> <input type="number" id="precoNormal" step="0.01"></div>
-                            <div class="form-group"><label for="precoVip">Preço VIP (Opcional):</label> <input type="number" id="precoVip" step="0.01"></div>
+                            <div class="form-group">
+                                <label for="precoNormal">Preço Normal:</label>
+                                <input type="number" id="precoNormal" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label for="precoVip">Preço VIP (Opcional):</label>
+                                <input type="number" id="precoVip" step="0.01">
+                            </div>
                         </section>
 
                         <div class="botoes-acao">
@@ -73,9 +99,28 @@
                         </div>
                     </form>
                 </div>
+
+                <div id="popup-confirm" class="popup-overlay escondido">
+                    <div class="popup-box">
+                        <h3>Eliminar evento</h3>
+                        <p>Tem a certeza que deseja eliminar este evento? Esta ação é irreversível.</p>
+
+                        <div class="popup-buttons">
+                            <button id="btnConfirmarEliminar" class="btn-danger">Eliminar</button>
+                            <button id="btnCancelarEliminar" class="btn-secondary">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="popup-info" class="popup-overlay escondido">
+                    <div class="popup-box">
+                        <p id="popupMensagem"></p>
+                        <button id="btnFecharPopup" class="btn-primary">OK</button>
+                    </div>
+                </div>
+
             </main>
         </div>
-        
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -86,4 +131,5 @@
     <script type="module" src="./editar_eventos.js"></script>
 
 </body>
+
 </html>
