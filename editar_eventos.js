@@ -10,26 +10,57 @@ const subtitulo = document.getElementById('subtitulo-pagina');
 const form = document.getElementById('form-criar-evento'); // Referência global para o form
 
 // ===============================================
-// --- FUNÇÕES DE UTENSÍLIOS / POPUPS (mantidas) ---
+// --- FUNÇÕES DE UTENSÍLIOS / POPUPS ---
 // ===============================================
 
 function mostrarPopupInfo(mensagem, callback = null) {
-    document.getElementById("popupMensagem").textContent = mensagem;
-    const popup = document.getElementById("popup-info");
+    document.getElementById("popupMensagem").textContent = mensagem;
+    const popup = document.getElementById("popup-info");
 
-    popup.classList.remove("escondido");
+    popup.classList.remove("escondido");
 
-    document.getElementById("btnFecharPopup").onclick = () => {
-        popup.classList.add("escondido");
-        if (callback) callback();
-    };
+    document.getElementById("btnFecharPopup").onclick = () => {
+        popup.classList.add("escondido");
+        if (callback) callback();
+    };
 };
 
+// ** NOVO: Implementação básica de Notificação de Erro **
+// Esta função assume que existe um elemento #notificacao no seu HTML (pode ser ajustada)
+function showNotification(mensagem, tipo = 'info') {
+    const notificacao = document.getElementById('notificacao-box') || document.createElement('div');
+    if (!document.getElementById('notificacao-box')) {
+        notificacao.id = 'notificacao-box';
+        // Adicionar estilos básicos para que a notificação apareça (recomenda-se CSS dedicado)
+        notificacao.style.position = 'fixed';
+        notificacao.style.top = '10px';
+        notificacao.style.right = '10px';
+        notificacao.style.padding = '15px';
+        notificacao.style.borderRadius = '5px';
+        notificacao.style.zIndex = '10000';
+        notificacao.style.color = 'white';
+        document.body.appendChild(notificacao);
+    }
+    
+    // Define a cor com base no tipo
+    notificacao.style.backgroundColor = (tipo === 'error') ? '#dc3545' : '#007bff'; 
+    notificacao.textContent = mensagem;
+    notificacao.style.display = 'block';
+
+    // Esconde automaticamente após 5 segundos
+    clearTimeout(notificacao.timer);
+    notificacao.timer = setTimeout(() => {
+        notificacao.style.display = 'none';
+    }, 5000);
+}
+
+
 // ===============================================
-// --- FUNÇÃO 1: Mostrar a Lista de Eventos (mantida) ---
+// --- FUNÇÃO 1: Mostrar a Lista de Eventos --- (Mantida)
 // ===============================================
 
 const mostrarListaDeSelecao = async (user) => {
+    // ... (código da função mostrarListaDeSelecao mantido) ...
     console.log("Modo: Mostrar Lista de Seleção para user:", user.uid);
     
     // Troca visibilidade
@@ -72,10 +103,11 @@ const mostrarListaDeSelecao = async (user) => {
 
 
 // ===============================================
-// --- FUNÇÃO 2: CARREGAR FORMULÁRIO PARA EDIÇÃO (NOVA E ESSENCIAL!) ---
+// --- FUNÇÃO 2: CARREGAR FORMULÁRIO PARA EDIÇÃO --- (Mantida)
 // ===============================================
 
 const carregarFormularioEdicao = async (eventoId) => {
+    // ... (código da função carregarFormularioEdicao mantido) ...
     console.log("Modo: Carregar Formulário para ID:", eventoId);
 
     // Troca visibilidade
@@ -124,105 +156,134 @@ const carregarFormularioEdicao = async (eventoId) => {
 
 
 // ===============================================
-// --- FUNÇÃO 3: CONFIGURAR BOTÕES (Guardar/Eliminar) ---
+// --- FUNÇÃO 3: CONFIGURAR BOTÕES (COM VALIDAÇÃO INTEGRADA) ---
 // ===============================================
-// O código desta função está correto e foi mantido, mas é necessário o 'form' globalmente
-// ou passá-lo como parâmetro para 'configurarBotoes'.
 
 const configurarBotoes = (id) => {
-    // Referências já estavam corretas dentro desta função, mas usei o form global para consistência.
-    const btnEliminar = document.getElementById('btn-eliminar');
-    const btnGuardar = form.querySelector('.btn-submeter'); 
+    // Referências
+    const btnEliminar = document.getElementById('btn-eliminar');
+    const btnGuardar = form.querySelector('.btn-submeter'); 
 
-    // ... (restante do código getFormData e form.onsubmit mantido como estava na sua correção) ...
-
-    // ===========================================
-    // FUNÇÃO AUXILIAR: COLETAR E PREPARAR DADOS
-    // ===========================================
-    const getFormData = () => {
-        const dataStr = document.getElementById('dataEvento').value;
-        const horaStr = document.getElementById('horaEvento').value;
-        const nomesOradoresTexto = document.getElementById('nomesOradores').value;
-        
-        const listaOradores = nomesOradoresTexto.split(',').map(n => n.trim()).filter(n => n !== "");
-        
-        const precoVipInput = document.getElementById('precoVip').value;
-        const precoVipValor = precoVipInput.trim() !== "" ? parseFloat(precoVipInput) : null;
-        
-        const dataHoraCombinada = new Date(`${dataStr}T${horaStr}`);
-        
-        return {
-            nome: document.getElementById('nomeEvento').value.trim(),
-            local: document.getElementById('localEvento').value.trim(),
-            max_participantes: parseInt(document.getElementById('maxParticipantes').value) || 0,
-            num_oradores: parseInt(document.getElementById('numOradores').value) || 0,
-            oradores: listaOradores,
-            data_string: dataStr, 
-            hora_string: horaStr,
-            data_inicio: firebase.firestore.Timestamp.fromDate(dataHoraCombinada), 
-            precos: {
-                normal: parseFloat(document.getElementById('precoNormal').value) || 0,
-                vip: precoVipValor
-            }
-        };
-    };
+    // ===========================================
+    // FUNÇÃO AUXILIAR: COLETAR E PREPARAR DADOS (Mantida)
+    // ===========================================
+    const getFormData = () => {
+        const dataStr = document.getElementById('dataEvento').value;
+        const horaStr = document.getElementById('horaEvento').value;
+        const nomesOradoresTexto = document.getElementById('nomesOradores').value;
+        const num_oradores = parseInt(document.getElementById('numOradores').value) || 0;
+        const precoNormal = parseFloat(document.getElementById('precoNormal').value) || 0; 
+        const listaOradores = nomesOradoresTexto.split(',').map(n => n.trim()).filter(n => n !== "");
+        const precoVipInput = document.getElementById('precoVip').value;
+        const precoVipValor = precoVipInput.trim() !== "" ? parseFloat(precoVipInput) : null;
+        const dataHoraCombinada = new Date(`${dataStr}T${horaStr}`);
+        
+        return {
+            nome: document.getElementById('nomeEvento').value.trim(),
+            local: document.getElementById('localEvento').value.trim(),
+            max_participantes: parseInt(document.getElementById('maxParticipantes').value) || 0,
+            num_oradores: parseInt(document.getElementById('numOradores').value) || 0,
+            oradores: listaOradores,
+            data_string: dataStr, 
+            hora_string: horaStr,
+            data_inicio: firebase.firestore.Timestamp.fromDate(dataHoraCombinada), 
+            precos: {
+                normal: parseFloat(document.getElementById('precoNormal').value) || 0,
+                vip: precoVipValor
+            } 
+        };
+    };
 
 
-    // ===========================================
-    // 1. AÇÃO DE GUARDAR / ATUALIZAR
-    // ===========================================
-    form.onsubmit = async (e) => {
-        e.preventDefault();
-        
-        btnGuardar.disabled = true;
-        const textoOriginal = btnGuardar.textContent;
-        btnGuardar.textContent = "A Guardar...";
-        
-        const updateData = getFormData();
-        
-        try {
-            await db.collection("eventos").doc(id).update(updateData);
+    // ===========================================
+    // 1. AÇÃO DE GUARDAR / ATUALIZAR (COM VALIDAÇÃO)
+    // ===========================================
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        
+        btnGuardar.disabled = true;
+        const textoOriginal = btnGuardar.textContent;
+        btnGuardar.textContent = "A Guardar...";
+        
+        const updateData = getFormData();
+        let mensagemErro = "";
 
-            mostrarPopupInfo("Evento atualizado com sucesso!", () => {
-                window.location.href = "editar_eventos.html";
-            });
-
-        } catch (error) {
-            console.error("Erro ao atualizar o evento:", error);
-            mostrarPopupInfo("Erro ao atualizar. Verifique se os campos estão corretos.");
+        // Desestruturação para facilitar a validação
+        const { nome, local, max_participantes, data_string, hora_string, precos } = updateData;
+        const precoNormal = precos.normal;
+        
+        // --- LÓGICA DE VALIDAÇÃO SOLICITADA ---
+       if (!nome) {
+            mensagemErro = "O Nome do Evento é obrigatório.";
+        } else if (!local) {
+            mensagemErro = "A Localização / Morada é obrigatória.";
+        } else if (isNaN(max_participantes) || max_participantes <= 0) {
+            mensagemErro = "O Máximo de Participantes deve ser um número válido e positivo.";
+        } else if (!data_string) {
+            mensagemErro = "A Data do Evento é obrigatória.";
+        } else if (!hora_string) {
+            mensagemErro = "A Hora do Evento é obrigatória.";
+        } else if (isNaN(num_oradores) || num_oradores < 0) { 
+            // ^-- NOVA REGRA DE VALIDAÇÃO
+            mensagemErro = "O Número de Oradores deve ser um número válido e não negativo (0 ou mais).";
+        } else if (isNaN(precoNormal) || precoNormal <= 0) {
+            mensagemErro = "O Preço Bilhete Normal deve ser um valor válido e positivo.";
+        }
+        // SE HOUVER ERRO DE VALIDAÇÃO: Pára o processo e notifica o utilizador.
+        if (mensagemErro) {
+            // Reativa o botão e mostra a notificação de erro
             btnGuardar.textContent = textoOriginal;
             btnGuardar.disabled = false;
+            
+            showNotification(` Erro de Validação: ${mensagemErro}`, 'error');
+            return; // *** Pára a submissão AQUI. ***
         }
-    };
+        // --- FIM DA VALIDAÇÃO ---
 
 
-    // ===========================================
-    // 2. AÇÃO DE ELIMINAR (Pop-up Personalizado)
-    // ===========================================
-    btnEliminar.onclick = () => {
-        const popupConfirm = document.getElementById("popup-confirm");
-        popupConfirm.classList.remove("escondido");
+        try {
+            await db.collection("eventos").doc(id).update(updateData);
 
-        document.getElementById("btnCancelarEliminar").onclick = () => {
-            popupConfirm.classList.add("escondido");
-        };
+            mostrarPopupInfo("Evento atualizado com sucesso!", () => {
+                window.location.href = "editar_eventos.html";
+            });
 
-        document.getElementById("btnConfirmarEliminar").onclick = async () => {
-            try {
-                await db.collection("eventos").doc(id).delete();
-                popupConfirm.classList.add("escondido");
+        } catch (error) {
+            console.error("Erro ao atualizar o evento:", error);
+            mostrarPopupInfo("Erro ao atualizar. Verifique se os campos estão corretos.");
+            btnGuardar.textContent = textoOriginal;
+            btnGuardar.disabled = false;
+        }
+    };
 
-                mostrarPopupInfo("Evento eliminado com sucesso!", () => {
-                    window.location.href = "editar_eventos.html";
-                });
 
-            } catch (error) {
-                console.error(error);
-                mostrarPopupInfo("Erro ao eliminar o evento.");
-                popupConfirm.classList.add("escondido");
-            }
-        };
-    };
+    // ===========================================
+    // 2. AÇÃO DE ELIMINAR (Pop-up Personalizado) (Mantida)
+    // ===========================================
+    btnEliminar.onclick = () => {
+        const popupConfirm = document.getElementById("popup-confirm");
+        popupConfirm.classList.remove("escondido");
+
+        document.getElementById("btnCancelarEliminar").onclick = () => {
+            popupConfirm.classList.add("escondido");
+        };
+
+        document.getElementById("btnConfirmarEliminar").onclick = async () => {
+            try {
+                await db.collection("eventos").doc(id).delete();
+                popupConfirm.classList.add("escondido");
+
+                mostrarPopupInfo("Evento eliminado com sucesso!", () => {
+                    window.location.href = "editar_eventos.html";
+                });
+
+            } catch (error) {
+                console.error(error);
+                mostrarPopupInfo("Erro ao eliminar o evento.");
+                popupConfirm.classList.add("escondido");
+            }
+        };
+    };
 };
 
 
@@ -231,22 +292,22 @@ const configurarBotoes = (id) => {
 // ===============================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    
-    auth.onAuthStateChanged((user) => {
-        if (!user) {
-            window.location.href = "login.html";
-            return;
-        }
+    
+    auth.onAuthStateChanged((user) => {
+        if (!user) {
+            window.location.href = "login.html";
+            return;
+        }
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const eventoId = urlParams.get('id');
+        const urlParams = new URLSearchParams(window.location.search);
+        const eventoId = urlParams.get('id');
 
-        if (eventoId) {
-            // TEM ID -> CHAMA A NOVA FUNÇÃO
-            carregarFormularioEdicao(eventoId);
-        } else {
-            // NÃO TEM ID -> CHAMA A LISTA
-            mostrarListaDeSelecao(user);
-        }
-    });
+        if (eventoId) {
+            // TEM ID -> CHAMA A NOVA FUNÇÃO
+            carregarFormularioEdicao(eventoId);
+        } else {
+            // NÃO TEM ID -> CHAMA A LISTA
+            mostrarListaDeSelecao(user);
+        }
+    });
 });
