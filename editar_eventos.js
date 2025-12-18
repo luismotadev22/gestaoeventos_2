@@ -2,7 +2,7 @@ import { db, auth, firebase } from './firebase_connection.js';
 
 console.log("Script editar_eventos.js iniciado...");
 
-// Referências aos elementos do HTML
+// Chama os elementos HTML pelo ID para poderem ser manipulados
 const divSelecao = document.getElementById('div-selecao-evento');
 const divFormulario = document.getElementById('div-formulario-edicao');
 const containerLista = document.getElementById('conteudo-lista');
@@ -13,22 +13,23 @@ const form = document.getElementById('form-criar-evento'); // Referência global
 // --- FUNÇÕES DE UTENSÍLIOS / POPUPS ---
 // ===============================================
 
-function mostrarPopupInfo(mensagem, callback = null) {
-    document.getElementById("popupMensagem").textContent = mensagem;
-    const popup = document.getElementById("popup-info");
+function mostrarPopupInfo(mensagem, callback = null) { // cria a funçao para mostrar popup
+    document.getElementById("popupMensagem").textContent = mensagem; // vai buscar o elmento id e coloca a mensagem la dentro
+    const popup = document.getElementById("popup-info"); // cria uma variavel costante popup-info para mostrar o popup
 
-    popup.classList.remove("escondido");
+    popup.classList.remove("escondido"); // remove a classe escondido para mostrar o popup
 
-    document.getElementById("btnFecharPopup").onclick = () => {
-        popup.classList.add("escondido");
-        if (callback) callback();
+    document.getElementById("btnFecharPopup").onclick = () => { // cria a funçao para fechar o popup
+        popup.classList.add("escondido"); // adiciona a classe escondido para esconder o popup 
+        if (callback) callback(); // se houver um callback, executa-o, serve para redirecionar apos fechar o popup
     };
 };
 
-// ** NOVO: Implementação básica de Notificação de Erro **
-// Esta função assume que existe um elemento #notificacao no seu HTML (pode ser ajustada)
-function showNotification(mensagem, tipo = 'info') {
-    const notificacao = document.getElementById('notificacao-box') || document.createElement('div');
+
+function showNotification(mensagem, tipo = 'info') { // tipo pode ser 'info' ou 'error'
+    const notificacao = document.getElementById('notificacao-box') || document.createElement('div'); // procura no html se existe a div notificacao-box ou cria uma nova div
+
+// Se a notificação ainda não estiver no DOM, adiciona-a
     if (!document.getElementById('notificacao-box')) {
         notificacao.id = 'notificacao-box';
         // Adicionar estilos básicos para que a notificação apareça (recomenda-se CSS dedicado)
@@ -43,7 +44,7 @@ function showNotification(mensagem, tipo = 'info') {
     }
     
     // Define a cor com base no tipo
-    notificacao.style.backgroundColor = (tipo === 'error') ? '#dc3545' : '#007bff'; 
+    notificacao.style.backgroundColor = (tipo === 'error') ? '#dc3545' : '#007bff';  // manipular elemento dom notificacao-box
     notificacao.textContent = mensagem;
     notificacao.style.display = 'block';
 
