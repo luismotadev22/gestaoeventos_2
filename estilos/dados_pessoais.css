@@ -1,0 +1,210 @@
+:root {
+    --ipca-blue: #003366;
+    --ipca-light-blue: #0056b3;
+    --bg-gray: #f4f7f9;
+    --text-dark: #333;
+    --danger: #d32f2f;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-gray);
+}
+
+.dashboard-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 260px;
+    background-color: var(--ipca-blue);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100%;
+}
+
+.sidebar-logo{
+    padding: 30px 20px; 
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.logo-text {
+    color: #00d4ff;
+    font-size: 1.8rem;
+    margin: 0;
+    font-weight: 900;
+}
+
+.logo-ipca {
+    max-width: 140px;
+    filter: brightness(7.0);
+    filter: saturate(7.0);
+    margin: 0 auto;
+    height: auto;
+    display: block;
+    margin-top: 20px;
+}
+
+
+.sidebar-nav {
+    flex-grow: 1;
+    padding: 20px 0;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    transition: 0.3s;
+    gap: 12px;
+}
+
+.nav-link:hover, .nav-link.active {
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
+
+.back-link {
+    font-weight: bold;
+    color: white;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 10px;
+}
+
+.btn-logout {
+    margin: 20px;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* CONTEÚDO */
+.main-content {
+    margin-left: 260px;
+    flex-grow: 1;
+    padding: 40px;
+}
+
+.content-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.header-center h1 {
+    font-size: 2rem;
+    color: var(--ipca-blue);
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0 20px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.btn-save {
+    width: 100%;
+    padding: 12px;
+    background: var(--ipca-blue);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-danger {
+    width: 100%;
+    padding: 12px;
+    background: var(--danger);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.danger-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza horizontalmente */
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* Estilo para o caixote do lixo grande ao meio */
+.trash-icon {
+    font-size: 4rem; /* Tamanho grande */
+    color: #d32f2f;
+    background: #ffebee; /* Fundo circular suave */
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.trash-icon:hover {
+    transform: scale(1.1); /* Efeito de zoom ao passar o rato */
+}
+
+/* Ajuste do parágrafo */
+.danger-content p {
+    color: #666;
+    font-size: 0.95rem;
+    max-width: 250px;
+    margin-bottom: 25px;
+}
+
+/* Botão Eliminar */
+.btn-danger {
+    width: 100%;
+    max-width: 200px; /* Largura fixa para não ficar demasiado largo */
+    padding: 12px;
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.3s;
+}
+
+.btn-danger:hover {
+    background-color: #b71c1c;
+}
+
+.status-msg { margin-top: 10px; font-size: 0.9rem; display: none; }
+.status-msg.ok { color: green; display: block; }
+.status-msg.err { color: red; display: block; }

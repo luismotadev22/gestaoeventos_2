@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPCA - Gestão de Perfil</title>
+    <link rel="stylesheet" href="estilos/dados_pessoais.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<div class="dashboard-wrapper">
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+                <img src="imagens/LogoIPCA.png" alt="Logo IPCA" class="logo-ipca">
+              </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-link back-link">
+                <i class="fas fa-arrow-left"></i> Voltar ao Dashboard
+            </a>
+            
+    
+        </nav>
+
+        <button id="btn-logout" class="btn-logout">
+            <i class="fas fa-sign-out-alt"></i> Sair
+        </button>
+    </aside>
+
+    <main class="main-content">
+        <header class="content-header">
+            <div class="header-center">
+                <h1>Gestão de Perfil</h1>
+                <p>Atualiza os teus dados ou elimina a conta.</p>
+            </div>
+        </header>
+
+        <section class="cards-grid">
+            <div class="card">
+                <h3><i class="fas fa-user"></i> Dados Pessoais</h3>
+                <form id="form-perfil">
+                    <label>Email</label>
+                    <input type="email" id="email" disabled>
+                    
+                    <label>Nome</label>
+                    <input type="text" id="nome" placeholder="Teu nome" required>
+                    
+                    <button type="submit" class="btn-save">Guardar Nome</button>
+                    <div id="status" class="status-msg"></div>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3><i class="fas fa-lock"></i> Segurança</h3>
+                <form id="form-pass">
+                    <input type="password" id="pass-atual" placeholder="Password Atual" required>
+                    <input type="password" id="pass-nova" placeholder="Nova Password (mínimo 6 caracteres)" required>
+                    <input type="password" id="pass-confirmar" placeholder="Confirmar Nova Password" required>
+                    
+                    <button type="submit" class="btn-save">Alterar Password</button>
+                    <div id="status-pass" class="status-msg"></div>
+                </form>
+            </div>
+
+            <div class="card danger-card">
+                <h3><i class="fas fa-exclamation-triangle"></i> Eliminar Conta</h3>
+                
+            <div class="danger-content">
+                <div class=""trash-icon">
+                    <i class="fas fa-trash-alt fa-3x"></i>
+                </div>
+                <p>A eliminação da conta é irreversível e apagará todos os teus dados.</p>
+                <button id="btn-eliminar" class="btn-danger">Eliminar Conta</button>
+                <div id="status-delete" class="status-msg"></div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script type="module" src="dados_pessoais.js"></script>
+
+</body>
+</html>

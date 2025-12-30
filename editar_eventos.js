@@ -30,7 +30,7 @@ function showNotification(mensagem, tipo = 'info') { // tipo pode ser 'info' ou 
     const notificacao = document.getElementById('notificacao-box') || document.createElement('div'); // procura no html se existe a div notificacao-box ou cria uma nova div
 
 // Se a notificação ainda não estiver no DOM, adiciona-a
-    if (!document.getElementById('notificacao-box')) {
+    if (!document.getElementById('notificacao-box')) { 
         notificacao.id = 'notificacao-box';
         // Adicionar estilos básicos para que a notificação apareça (recomenda-se CSS dedicado)
         notificacao.style.position = 'fixed';

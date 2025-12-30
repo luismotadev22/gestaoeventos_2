@@ -1,0 +1,169 @@
+:root {
+    --primary-color: #003366;
+    --bg-light: #f4f7f6;
+    --text-dark: #333;
+    --success: #28a745;
+}
+
+.container-header {
+    position: relative; /* Base para o botão absoluto */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center; /* Centraliza o conteúdo horizontalmente */
+    align-items: center;    /* Centraliza verticalmente */
+    min-height: 100px;
+}
+
+/* O Botão - O "left: 20px" coloca-o no canto sem empurrar o título */
+.btn-voltar-seta {
+    position: absolute;
+    left: -100px; 
+    top: 50%;
+    transform: translateY(-50%); /* Ajuste fino vertical */
+    
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+/* Garante que o texto central não se desvie */
+.header-texto {
+    text-align: center;
+}
+
+.header-texto h1 {
+    margin: 45px;
+    font-size: 2rem;
+}
+
+.header-texto p {
+    margin: 15px 0 0;
+    opacity: 0.9;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+.vendas-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 40px 0;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+
+
+/* Card do Evento */
+.card-kpi {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.header-evento {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.header-texto {
+    text-align: center; /* Garante que o h1 e o p fiquem alinhados entre si */
+}
+
+.header-texto h1 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+
+
+.status-badge {
+    background: #e1f5fe;
+    color: #0288d1;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* Grid de KPIs */
+.grid-kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.kpi-item {
+    background: #fdfdfd;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.label {
+    font-size: 0.9rem;
+    color: #777;
+    margin-bottom: 8px;
+}
+
+.valor {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.valor.faturado {
+    color: var(--success);
+}
+
+/* Barra de Progresso (Ocupação) */
+.progress-bar {
+    width: 100%;
+    background: #eee;
+    height: 8px;
+    border-radius: 4px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--success);
+    transition: width 0.5s ease;
+}
+
+/* Utilitários */
+.escondido { display: none; }

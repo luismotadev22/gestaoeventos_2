@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Vendas - KPIs de Eventos</title>
+    <link rel="stylesheet" href="estilos/vendas.css">
+    <script type="module" src="vendas.js"></script>
+</head>
+<body>
+
+    <div class="wrapper">
+        <header class="vendas-header">
+            <div class="container-header">
+                <a href="dashboard.html" class="btn-voltar-seta" title="Voltar ao Dashboard">&#10094; Voltar ao Dashboard
+                </a>
+            <div class="header-texto">
+                <h1>📊 Gestão de Vendas</h1>
+                <p id="subtitulo-vendas">Análise de desempenho e indicadores sobre os teus eventos.</p>
+            </div>    
+            </div>
+        </header>
+
+        <main class="container">
+            <div id="status-vendas" class="status-container">
+                </div>
+
+            <div id="container-kpis-eventos" class="kpis-wrapper">
+                <div class="loader-simulado">A carregar dados...</div>
+            </div>
+        </main>
+    </div>
+
+    <div id="popup-info" class="escondido">
+        <div class="popup-conteudo">
+            <p id="popupMensagem"></p>
+            <button id="btnFecharPopup">Fechar</button>
+        </div>
+    </div>
+
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+
+<script type="module" src="js/firebase_connection.js"></script>
+<script type="module" src="js/vendas.js"></script>
+
+</body>
+</html>
