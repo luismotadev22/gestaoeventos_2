@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendário</title>
+
+  <link rel="stylesheet" href="estilos/dashboard.css" />
+  <link rel="stylesheet" href="estilos/calendario_participante.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <!-- Firebase v8 (global window.firebase) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+
+<body>
+  <div id="dashboard-container" class="dashboard-container">
+
+    <aside class="sidebar">
+      <div class="logo-area">
+        <a href="dashboard.html">
+          <img src="imagens/LogoIPCA.png" alt="IPCA" class="logo-ipca"/>
+        </a>
+      </div>
+
+      <button id="toggle-sidebar" class="toggle-btn">←</button>
+
+      <nav class="menu-principal">
+        <a href="dashboard.html" class="menu-item"><i class="fas fa-home"></i><span>Menu Inicial</span></a>
+        <a href="explorar_eventos.html" class="menu-item"><i class="fas fa-search"></i><span>Explorar Eventos</span></a>
+        <a href="calendario_participante.html" class="menu-item active"><i class="fas fa-calendar-alt"></i><span>Calendário</span></a>
+        <a href="minhas_inscricoes.html" class="menu-item"><i class="fas fa-ticket-alt"></i><span>As Minhas Inscrições</span></a>
+        <a href="eventos_favoritos.html" class="menu-item"><i class="fas fa-star"></i><span>Eventos Favoritos</span></a>
+        <a href="dados_pessoais.html" class="menu-item"><i class="fas fa-user-cog"></i><span>Gestão de Perfil</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="perfil-info">
+          <p id="display-nome-utilizador" class="nome-utilizador">Utilizador</p>
+          <p class="perfil-utilizador">Participante</p>
+        </div>
+
+        <a href="#" id="btn-logout" class="btn-logout">
+          <i class="fas fa-sign-out-alt"></i> <span>Sair</span>
+        </a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="main-header">
+        <h1>Calendário</h1>
+        <p>Todos os próximos eventos. Os que já estás inscrito aparecem destacados.</p>
+      </header>
+
+      <div id="debug-erro" class="debug-erro" style="display:none;"></div>
+
+      <section class="cal-top">
+        <div class="cal-search">
+          <i class="fas fa-search"></i>
+          <input id="pesquisa-cal" type="text" placeholder="Pesquisar por nome do evento..." />
+        </div>
+
+        <div class="cal-controls">
+          <button id="btn-hoje" class="btn-soft"><i class="fas fa-dot-circle"></i> Hoje</button>
+          <button id="btn-prev" class="btn-icon" title="Mês anterior"><i class="fas fa-chevron-left"></i></button>
+          <div id="cal-mes-ano" class="cal-mes-ano">—</div>
+          <button id="btn-next" class="btn-icon" title="Mês seguinte"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </section>
+
+      <section class="cal-layout">
+        <div class="cal-card">
+          <div class="cal-weekdays">
+            <div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div><div>Dom</div>
+          </div>
+          <div id="cal-grid" class="cal-grid"></div>
+        </div>
+
+        <aside class="day-panel">
+          <div class="day-panel-head">
+            <div>
+              <div class="day-title" id="dia-titulo">—</div>
+              <div class="day-sub" id="dia-sub">Seleciona um dia para ver eventos</div>
+            </div>
+            <span id="dia-badge" class="day-badge">—</span>
+          </div>
+
+          <div id="lista-dia" class="day-list"></div>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODAL DETALHES EVENTO -->
+  <div id="modal-evento-backdrop" style="display:none;">
+    <div id="modal-evento">
+      <div class="me-head">
+        <div>
+          <div id="me-titulo" class="me-titulo">Evento</div>
+          <div id="me-sub" class="me-sub">—</div>
+        </div>
+        <button id="me-fechar" class="me-x" type="button"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="me-body">
+        <div class="me-row"><i class="fas fa-calendar-alt"></i> <span id="me-data">—</span></div>
+        <div class="me-row"><i class="fas fa-map-marker-alt"></i> <span id="me-local">—</span></div>
+        <div class="me-row"><i class="fas fa-euro-sign"></i> <span id="me-precos">—</span></div>
+
+        <div id="me-status" class="me-status"></div>
+
+        <div class="me-actions">
+          <button id="me-ver-bilhete" class="me-btn-primary" type="button" style="display:none;">
+            <i class="fas fa-ticket-alt"></i> Ver bilhete
+          </button>
+
+          <button id="me-ir-explorar" class="me-btn-primary" type="button" style="display:none;">
+            Deseja participar?
+          </button>
+
+          <button id="me-fechar-2" class="me-btn-secondary" type="button">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="calendario_participante.js"></script>
+</body>
+</html>

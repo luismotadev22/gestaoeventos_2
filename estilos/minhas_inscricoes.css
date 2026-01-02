@@ -1,0 +1,147 @@
+.widgets-container{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
+  margin-top: 16px;
+}
+
+/* bilhete */
+.ticket-card{
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 8px 26px rgba(0,0,0,.06);
+  overflow: hidden;
+}
+
+.ticket-head{
+  display:flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 14px 10px 14px;
+  border-bottom: 1px dashed rgba(0,0,0,.15);
+}
+
+.ticket-title{
+  margin:0;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.ticket-sub{
+  margin-top: 6px;
+  display:flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: rgba(0,0,0,.65);
+}
+
+.ticket-badge{
+  padding: 8px 10px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 12px;
+  color: #111;
+  background: rgba(0,0,0,.08);
+  white-space: nowrap;
+}
+
+.ticket-badge.vip{
+  background: rgba(255, 193, 7, .35);
+  border: 1px solid rgba(255, 193, 7, .55);
+}
+
+.ticket-badge.normal{
+  background: rgba(13, 110, 253, .12);
+  border: 1px solid rgba(13, 110, 253, .25);
+}
+
+.ticket-body{
+  padding: 14px;
+  display:flex;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.ticket-info{
+  flex: 1;
+  min-width: 210px;
+  font-size: 13px;
+  color: rgba(0,0,0,.85);
+}
+
+.ticket-info p{
+  margin: 6px 0;
+}
+
+.ticket-date{
+  color: rgba(0,0,0,.6);
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.ticket-qr{
+  width: 190px;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.qr-box{
+  width: 170px;
+  height: 170px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,.12);
+}
+
+.qr-hint{
+  font-size: 12px;
+  color: rgba(0,0,0,.65);
+  text-align:center;
+}
+
+/* estado vazio */
+.ticket-empty{
+  grid-column: 1 / -1;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,.08);
+  padding: 18px;
+}
+
+.ticket-empty h3{
+  margin: 0 0 8px 0;
+  font-weight: 900;
+}
+
+.ticket-empty p{
+  margin: 0 0 14px 0;
+  color: rgba(0,0,0,.7);
+}
+
+.btn-go{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #0b5ed7;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 900;
+}
+.ticket-destaque {
+  outline: 3px solid rgba(11, 94, 215, 0.45);
+  box-shadow: 0 0 0 6px rgba(11, 94, 215, 0.10);
+  transform: translateY(-2px);
+  transition: .2s;
+}

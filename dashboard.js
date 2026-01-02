@@ -1,135 +1,100 @@
 import { auth, db } from './firebase_connection.js';
 
 /* ===============================
-   HELPERS / UTILITÁRIOS
+   HELPERS
 ================================ */
 function euro(n) {
-    const v = Number(n ?? 0);
-    return v.toLocaleString("pt-PT", { style: "currency", currency: "EUR" });
+  const v = Number(n ?? 0);
+  return v.toLocaleString("pt-PT", { style: "currency", currency: "EUR" });
 }
 
 function parseDataHora(dataStr, horaStr) {
-    if (!dataStr) return null;
-    const h = horaStr || "00:00";
-    const d = new Date(`${dataStr}T${h}`);
-    if (isNaN(d.getTime())) return null;
-    return d;
+  if (!dataStr) return null;
+  const h = horaStr || "00:00";
+  const d = new Date(`${dataStr}T${h}`);
+  if (isNaN(d.getTime())) return null;
+  return d;
 }
 
 function formatDataPT(dateStr) {
-    if (!dateStr) return "—";
-    const parts = String(dateStr).split("-");
-    if (parts.length !== 3) return String(dateStr);
-    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  // espera "YYYY-MM-DD"
+  if (!dateStr) return "—";
+  const parts = String(dateStr).split("-");
+  if (parts.length !== 3) return String(dateStr);
+  return `${parts[2]}/${parts[1]}/${parts[0]}`;
 }
 
 function capitalizar(s) {
-    if (!s) return "";
-    return s.charAt(0).toUpperCase() + s.slice(1);
+  if (!s) return "";
+  return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 /* ===============================
-   DADOS REAIS: ORGANIZADOR
-================================ */
-async function obterDadosReaisOrganizador(organizadorUid) {
-    try {
-        const eventosSnapshot = await db.collection("eventos")
-            .where("responsavel_uid", "==", organizadorUid)
-            .get();
-
-        if (eventosSnapshot.empty) {
-            return { totalArrecadado: 0, inscricoesTotais: 0, eventosAtivos: 0, notificacoes: 0 };
-        }
-
-        let totalGeralFaturado = 0;
-        let totalGeralInscritos = 0;
-        let eventosAtivosContagem = 0;
-
-        for (const docEvento of eventosSnapshot.docs) {
-            const evento = docEvento.data();
-            const eventoId = docEvento.id;
-
-            if (evento.estado === "ativo") eventosAtivosContagem++;
-
-            const vendasSnapshot = await db.collection("inscricoes")
-                .where("uid_evento", "==", eventoId)
-                .get();
-
-            totalGeralInscritos += vendasSnapshot.size;
-
-            vendasSnapshot.forEach(docInscricao => {
-                const inscricao = docInscricao.data();
-                totalGeralFaturado += (inscricao.valor_pago || inscricao.preco || 0);
-            });
-        }
-
-        return {
-            totalArrecadado: totalGeralFaturado,
-            inscricoesTotais: totalGeralInscritos,
-            eventosAtivos: eventosAtivosContagem,
-            notificacoes: 2 
-        };
-    } catch (error) {
-        console.error("Erro ao sincronizar dados de organizador:", error);
-        return { totalArrecadado: 0, inscricoesTotais: 0, eventosAtivos: 0, notificacoes: 0 };
-    }
-}
-
-/* ===============================
-   DADOS REAIS: PARTICIPANTE
+   PARTICIPANTE: DADOS REAIS
+   (coleção: inscricoes)
 ================================ */
 async function obterDadosParticipante(uid) {
-    const snap = await db.collection("inscricoes").where("uid_user", "==", uid).get();
-    const inscricoes = [];
-    snap.forEach((doc) => inscricoes.push({ id: doc.id, ...doc.data() }));
+  const snap = await db.collection("inscricoes").where("uid_user", "==", uid).get();
 
-    const total = inscricoes.length;
-    const vip = inscricoes.filter(i => (i.tipo_bilhete || "").toLowerCase() === "vip").length;
-    const normal = inscricoes.filter(i => (i.tipo_bilhete || "").toLowerCase() !== "vip").length;
-    const gastoTotal = inscricoes.reduce((acc, i) => acc + Number(i.valor_pago ?? 0), 0);
+  const inscricoes = [];
+  snap.forEach((doc) => inscricoes.push({ id: doc.id, ...doc.data() }));
 
-    const agora = new Date();
-    const futuras = inscricoes
-        .map(i => ({ ...i, __dt: parseDataHora(i.evento_data_string, i.evento_hora_string) }))
-        .filter(i => i.__dt && i.__dt.getTime() >= agora.getTime())
-        .sort((a, b) => a.__dt - b.__dt);
+  const total = inscricoes.length;
+  const vip = inscricoes.filter(i => (i.tipo_bilhete || "").toLowerCase() === "vip").length;
+  const normal = inscricoes.filter(i => (i.tipo_bilhete || "").toLowerCase() !== "vip").length;
 
-    let proximoEvento = null;
-    if (futuras.length > 0) {
-        const p = futuras[0];
-        proximoEvento = {
-            uid_evento: p.uid_evento || "",
-            nome: p.evento_nome || "Evento",
-            data: p.evento_data_string || "",
-            hora: p.evento_hora_string || "",
-            local: p.evento_local || "—",
-            tipo_bilhete: p.tipo_bilhete || "normal"
-        };
-    } else if (inscricoes.length > 0) {
-        const ordenadas = inscricoes
-            .map(i => ({ ...i, __dt: parseDataHora(i.evento_data_string, i.evento_hora_string) }))
-            .filter(i => i.__dt)
-            .sort((a, b) => a.__dt - b.__dt);
+  const gastoTotal = inscricoes.reduce((acc, i) => acc + Number(i.valor_pago ?? 0), 0);
 
-        if (ordenadas.length > 0) {
-            const p = ordenadas[ordenadas.length - 1]; // Pega o último evento se todos passaram
-            proximoEvento = {
-                uid_evento: p.uid_evento || "",
-                nome: p.evento_nome || "Evento",
-                data: p.evento_data_string || "",
-                hora: p.evento_hora_string || "",
-                local: p.evento_local || "—",
-                tipo_bilhete: p.tipo_bilhete || "normal"
-            };
-        }
-    }
+  // Próximo evento futuro: data/hora mais próxima (>= agora)
+  const agora = new Date();
+  const futuras = inscricoes
+    .map(i => ({ ...i, __dt: parseDataHora(i.evento_data_string, i.evento_hora_string) }))
+    .filter(i => i.__dt && i.__dt.getTime() >= agora.getTime())
+    .sort((a, b) => a.__dt - b.__dt);
 
-    return {
-        proximoEvento,
-        bilhetes: { total, vip, normal, gastoTotal },
-        notificacoes: 5 
+  let proximoEvento = null;
+
+  if (futuras.length > 0) {
+    const p = futuras[0];
+    proximoEvento = {
+      uid_evento: p.uid_evento || "",           // ✅ necessário para abrir bilhete direto
+      nome: p.evento_nome || "Evento",
+      data: p.evento_data_string || "",
+      hora: p.evento_hora_string || "",
+      local: p.evento_local || "—",
+      tipo_bilhete: p.tipo_bilhete || "normal"
     };
+  } else if (inscricoes.length > 0) {
+    // fallback: mostra o mais “perto” (mesmo que já tenha passado) para não ficar vazio
+    const ordenadas = inscricoes
+      .map(i => ({ ...i, __dt: parseDataHora(i.evento_data_string, i.evento_hora_string) }))
+      .filter(i => i.__dt)
+      .sort((a, b) => a.__dt - b.__dt);
+
+    if (ordenadas.length > 0) {
+      const p = ordenadas[0];
+      proximoEvento = {
+        uid_evento: p.uid_evento || "",
+        nome: p.evento_nome || "Evento",
+        data: p.evento_data_string || "",
+        hora: p.evento_hora_string || "",
+        local: p.evento_local || "—",
+        tipo_bilhete: p.tipo_bilhete || "normal"
+      };
+    }
+  }
+
+  return {
+    proximoEvento,
+    bilhetes: { total, vip, normal, gastoTotal },
+    notificacoes: 5 // manténs como estático
+  };
 }
+
+/* ===============================
+   ORGANIZADOR (mantém simples)
+================================ */
+
 
 /* ===============================
    RENDERIZAÇÃO DO CONTEÚDO
@@ -193,6 +158,7 @@ function carregarConteudoDashboard(perfil, emailCompleto, dados) {
         menuHTML = `
             <a href="dashboard.html" class="menu-item active"><i class="fas fa-home"></i><span>Menu Inicial</span></a>
             <a href="explorar_eventos.html" class="menu-item"><i class="fas fa-search"></i><span>Explorar Eventos</span></a>
+            <a href="calendario_participante.html" class="menu-item"><i class="fas fa-calendar-alt"></i><span>Calendário</span></a>
             <a href="minhas_inscricoes.html" class="menu-item"><i class="fas fa-ticket-alt"></i><span>As Minhas Inscrições</span></a>
             <a href="dados_pessoais.html" class="menu-item"><i class="fas fa-user-cog"></i><span>Gestão de Perfil</span></a>
         `;
@@ -216,7 +182,7 @@ function carregarConteudoDashboard(perfil, emailCompleto, dados) {
                 <p class="widget-detalhe">VIP: ${dados.bilhetes.vip} | Normal: ${dados.bilhetes.normal}</p>
             </div>
             <div class="widget">
-                <h3>Investimento Total</h3>
+                <h3>Gasto Total</h3>
                 <p class="widget-numero widget-dinheiro">${euro(dados.bilhetes.gastoTotal)}</p>
                 <p class="widget-detalhe">Total gasto em inscrições.</p>
             </div>
@@ -230,6 +196,13 @@ function carregarConteudoDashboard(perfil, emailCompleto, dados) {
                 <p class="widget-detalhe">Encontre novos workshops e palestras.</p>
                 <a href="explorar_eventos.html" class="btn btn-primario"><i class="fas fa-search"></i> Explorar Eventos</a>
             </div>
+
+            <div class="widget-actions">
+                <a href="minhas_inscricoes.html?evento=${encodeURIComponent(prox.uid_evento || "")}"
+                   class="btn btn-primario">
+                  <i class="fas fa-ticket-alt"></i> Abrir bilhete
+                </a>
+              </div>
         `;
     }
 
