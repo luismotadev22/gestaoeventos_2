@@ -1,106 +1,131 @@
 import { auth, db } from './firebase_connection.js';
 
 /* ===============================
-   HELPERS
+   HELPERS / UTILITÁRIOS
 ================================ */
 function euro(n) {
-  const v = Number(n ?? 0);
-  return v.toLocaleString("pt-PT", { style: "currency", currency: "EUR" });
+    const v = Number(n ?? 0);
+    return v.toLocaleString("pt-PT", { style: "currency", currency: "EUR" });
 }
 
 function parseDataHora(dataStr, horaStr) {
-  if (!dataStr) return null;
-  const h = horaStr || "00:00";
-  const d = new Date(`${dataStr}T${h}`);
-  if (isNaN(d.getTime())) return null;
-  return d;
+    if (!dataStr) return null;
+    const h = horaStr || "00:00";
+    const d = new Date(`${dataStr}T${h}`);
+    return isNaN(d.getTime()) ? null : d;
 }
 
 function formatDataPT(dateStr) {
-  // espera "YYYY-MM-DD"
-  if (!dateStr) return "—";
-  const parts = String(dateStr).split("-");
-  if (parts.length !== 3) return String(dateStr);
-  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    if (!dateStr) return "—";
+    const parts = String(dateStr).split("-");
+    if (parts.length !== 3) return String(dateStr);
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
 }
 
 function capitalizar(s) {
-  if (!s) return "";
-  return s.charAt(0).toUpperCase() + s.slice(1);
+    if (!s) return "";
+    return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 /* ===============================
-   PARTICIPANTE: DADOS REAIS
-   (coleção: inscricoes)
+   DADOS REAIS: ORGANIZADOR
+================================ */
+async function obterDadosReaisOrganizador(organizadorUid) {
+    try {
+        const eventosSnapshot = await db.collection("eventos")
+            .where("responsavel_uid", "==", organizadorUid)
+            .get();
+
+        if (eventosSnapshot.empty) {
+            return { totalArrecadado: 0, inscricoesTotais: 0, eventosAtivos: 0, notificacoes: 0 };
+        }
+
+        let totalGeralFaturado = 0;
+        let totalGeralInscritos = 0;
+        let eventosAtivosContagem = 0;
+
+        for (const docEvento of eventosSnapshot.docs) {
+            const evento = docEvento.data();
+            const eventoId = docEvento.id;
+
+            if (evento.estado === "ativo") eventosAtivosContagem++;
+
+            const vendasSnapshot = await db.collection("inscricoes")
+                .where("uid_evento", "==", eventoId)
+                .get();
+
+            totalGeralInscritos += vendasSnapshot.size;
+
+            vendasSnapshot.forEach(docInscricao => {
+                const inscricao = docInscricao.data();
+                // Tenta somar valor_pago ou preco
+                totalGeralFaturado += (Number(inscricao.valor_pago) || Number(inscricao.preco) || 0);
+            });
+        }
+
+        return {
+            totalArrecadado: totalGeralFaturado,
+            inscricoesTotais: totalGeralInscritos,
+            eventosAtivos: eventosAtivosContagem,
+            notificacoes: 2 
+        };
+    } catch (error) {
+        console.error("Erro ao sincronizar dados de organizador:", error);
+        return { totalArrecadado: 0, inscricoesTotais: 0, eventosAtivos: 0, notificacoes: 0 };
+    }
+}
+
+/* ===============================
+   DADOS REAIS: PARTICIPANTE
 ================================ */
 async function obterDadosParticipante(uid) {
-  const snap = await db.collection("inscricoes").where("uid_user", "==", uid).get();
+    try {
+        const snap = await db.collection("inscricoes").where("uid_user", "==", uid).get();
+        const inscricoes = [];
+        snap.forEach((doc) => inscricoes.push({ id: doc.id, ...doc.data() }));
 
-  const inscricoes = [];
-  snap.forEach((doc) => inscricoes.push({ id: doc.id, ...doc.data() }));
+        const total = inscricoes.length;
+        const vip = inscricoes.filter(i => (i.tipo_bilhete || "").toLowerCase() === "vip").length;
+        const normal = total - vip;
+        const gastoTotal = inscricoes.reduce((acc, i) => acc + Number(i.valor_pago ?? 0), 0);
 
-  const total = inscricoes.length;
-  const vip = inscricoes.filter(i => (i.tipo_bilhete || "").toLowerCase() === "vip").length;
-  const normal = inscricoes.filter(i => (i.tipo_bilhete || "").toLowerCase() !== "vip").length;
+        const agora = new Date();
+        const ordenadas = inscricoes
+            .map(i => ({ ...i, __dt: parseDataHora(i.evento_data_string, i.evento_hora_string) }))
+            .filter(i => i.__dt !== null)
+            .sort((a, b) => a.__dt - b.__dt);
 
-  const gastoTotal = inscricoes.reduce((acc, i) => acc + Number(i.valor_pago ?? 0), 0);
+        const futuras = ordenadas.filter(i => i.__dt.getTime() >= agora.getTime());
+        const eventoDestaque = futuras.length > 0 ? futuras[0] : (ordenadas.length > 0 ? ordenadas[ordenadas.length - 1] : null);
 
-  // Próximo evento futuro: data/hora mais próxima (>= agora)
-  const agora = new Date();
-  const futuras = inscricoes
-    .map(i => ({ ...i, __dt: parseDataHora(i.evento_data_string, i.evento_hora_string) }))
-    .filter(i => i.__dt && i.__dt.getTime() >= agora.getTime())
-    .sort((a, b) => a.__dt - b.__dt);
+        let proximoEvento = null;
+        if (eventoDestaque) {
+            proximoEvento = {
+                uid_evento: eventoDestaque.uid_evento || "",
+                nome: eventoDestaque.evento_nome || "Evento",
+                data: eventoDestaque.evento_data_string || "",
+                hora: eventoDestaque.evento_hora_string || "",
+                local: eventoDestaque.evento_local || "—",
+                tipo_bilhete: eventoDestaque.tipo_bilhete || "normal"
+            };
+        }
 
-  let proximoEvento = null;
-
-  if (futuras.length > 0) {
-    const p = futuras[0];
-    proximoEvento = {
-      uid_evento: p.uid_evento || "",           // ✅ necessário para abrir bilhete direto
-      nome: p.evento_nome || "Evento",
-      data: p.evento_data_string || "",
-      hora: p.evento_hora_string || "",
-      local: p.evento_local || "—",
-      tipo_bilhete: p.tipo_bilhete || "normal"
-    };
-  } else if (inscricoes.length > 0) {
-    // fallback: mostra o mais “perto” (mesmo que já tenha passado) para não ficar vazio
-    const ordenadas = inscricoes
-      .map(i => ({ ...i, __dt: parseDataHora(i.evento_data_string, i.evento_hora_string) }))
-      .filter(i => i.__dt)
-      .sort((a, b) => a.__dt - b.__dt);
-
-    if (ordenadas.length > 0) {
-      const p = ordenadas[0];
-      proximoEvento = {
-        uid_evento: p.uid_evento || "",
-        nome: p.evento_nome || "Evento",
-        data: p.evento_data_string || "",
-        hora: p.evento_hora_string || "",
-        local: p.evento_local || "—",
-        tipo_bilhete: p.tipo_bilhete || "normal"
-      };
+        return {
+            proximoEvento,
+            bilhetes: { total, vip, normal, gastoTotal },
+            notificacoes: 5 
+        };
+    } catch (error) {
+        console.error("Erro ao obter dados do participante:", error);
+        return null;
     }
-  }
-
-  return {
-    proximoEvento,
-    bilhetes: { total, vip, normal, gastoTotal },
-    notificacoes: 5 // manténs como estático
-  };
 }
-
-/* ===============================
-   ORGANIZADOR (mantém simples)
-================================ */
-
 
 /* ===============================
    RENDERIZAÇÃO DO CONTEÚDO
 ================================ */
 function carregarConteudoDashboard(perfil, emailCompleto, dados) {
-    const nomeBase = emailCompleto.split('@')[0];
+    const nomeBase = (emailCompleto || "Utilizador").split('@')[0];
     const menuContainer = document.getElementById('menu-principal-dinamico');
     const conteudoContainer = document.getElementById('conteudo-principal-dinamico');
     const nomeUtilizadorEl = document.getElementById('display-nome-utilizador');
@@ -112,8 +137,8 @@ function carregarConteudoDashboard(perfil, emailCompleto, dados) {
     let conteudoHTML = '';
 
     if (perfil === 'organizador') {
-        tituloHeaderEl.textContent = `Bem-vindo ${nomeBase}!`;
-        subtituloHeaderEl.textContent = 'Crie os melhores eventos, workshops e conferências do IPCA!';
+        tituloHeaderEl.textContent = `Bem-vindo, ${capitalizar(nomeBase)}!`;
+        subtituloHeaderEl.textContent = `Cria e gere os seus eventos no IPCA.`;
 
         menuHTML = `
             <a href="dashboard.html" class="menu-item active"><i class="fas fa-home"></i><span>Menu Inicial</span></a>
@@ -125,91 +150,97 @@ function carregarConteudoDashboard(perfil, emailCompleto, dados) {
 
         conteudoHTML = `
             <div class="widget">
-                <h3>Total Arrecadado (€)</h3>
+                <h3>Total Arrecadado</h3>
                 <p class="widget-numero widget-dinheiro">${euro(dados.totalArrecadado)}</p>
-                <p class="widget-detalhe">Receita bruta baseada em inscrições reais.</p>
+                <p class="widget-detalhe">Receita bruta das inscrições.</p>
+                <div class="widget-actions">
+                    <a href="vendas.html" class="btn btn-primario"><i class="fas fa-file-invoice-dollar"></i> Ver Detalhes</a>
+                </div>
             </div>
             <div class="widget">
                 <h3>Inscrições Totais</h3>
                 <p class="widget-numero">${dados.inscricoesTotais}</p>
-                <p class="widget-detalhe">Total de participantes em todos os eventos.</p>
+                <p class="widget-detalhe">Participantes registados.</p>
+                <div class="widget-actions">
+                 
+                </div>
             </div>
             <div class="widget">
                 <h3>Eventos Ativos</h3>
                 <p class="widget-numero">${dados.eventosAtivos}</p>
-                <p class="widget-detalhe">Eventos atualmente ativos no sistema.</p>
-            </div>
-            <div class="widget">
-                <h3>Notificações</h3>
-                <p class="widget-numero">${dados.notificacoes}</p>
-                <p class="widget-detalhe">Alertas e pendências não lidas.</p>
+                <p class="widget-detalhe">A decorrer ou publicados.</p>
+                <div class="widget-actions">
+                    <a href="editar_eventos.html" class="btn btn-primario"><i class="fas fa-calendar-check"></i> Gerir Eventos</a>
+                </div>
             </div>
             <div class="widget widget-cta">
-                <h3>Pronto para o próximo evento?</h3>
-                <p class="widget-detalhe">Comece a criar o seu próximo evento.</p>
-                <a href="criar_evento.html" class="btn btn-primario"><i class="fas fa-plus-circle"></i> Criar Novo Evento</a>
+                <h3>Novo Evento?</h3>
+                <p class="widget-detalhe">Comece agora a criar o seu próximo evento IPCA.</p>
+                <div class="widget-actions">
+                    <a href="criar_evento.html" class="btn btn-primario"><i class="fas fa-plus"></i> Criar Novo</a>
+                </div>
             </div>
         `;
     } 
-    else if (perfil === 'participante') {
-        tituloHeaderEl.textContent = `Bem-vindo ${nomeBase}!`;
-        subtituloHeaderEl.textContent = 'Participe nos melhores eventos e workshops do IPCA!';
+    else {
+        tituloHeaderEl.textContent = `Bem-vindo, ${capitalizar(nomeBase)}!`;
+        subtituloHeaderEl.textContent = 'Encontra e participa nos melhores eventos do IPCA.';
 
         menuHTML = `
             <a href="dashboard.html" class="menu-item active"><i class="fas fa-home"></i><span>Menu Inicial</span></a>
             <a href="explorar_eventos.html" class="menu-item"><i class="fas fa-search"></i><span>Explorar Eventos</span></a>
-            <a href="calendario_participante.html" class="menu-item"><i class="fas fa-calendar-alt"></i><span>Calendário</span></a>
+             <a href="calendario_participante.html" class="menu-item"><i class="fas fa-calendar-alt"></i><span>Calendário</span></a>
             <a href="minhas_inscricoes.html" class="menu-item"><i class="fas fa-ticket-alt"></i><span>As Minhas Inscrições</span></a>
+            <a href="eventos_favoritos.html" class="menu-item"><i class="fas fa-star"></i><span>Eventos Favoritos</span></a>
             <a href="dados_pessoais.html" class="menu-item"><i class="fas fa-user-cog"></i><span>Gestão de Perfil</span></a>
         `;
 
         const prox = dados.proximoEvento;
         const infoEventoHTML = prox ? `
             <p class="widget-titulo-destaque">${prox.nome}</p>
-            <p class="widget-detalhe"><i class="fas fa-calendar-alt"></i> Data: ${formatDataPT(prox.data)} às ${prox.hora}</p>
-            <p class="widget-detalhe"><i class="fas fa-map-marker-alt"></i> Local: ${prox.local}</p>
-            <p class="widget-detalhe"><i class="fas fa-tag"></i> Tipo: ${capitalizar(prox.tipo_bilhete)}</p>
+            <p class="widget-detalhe"><i class="fas fa-calendar-alt"></i> ${formatDataPT(prox.data)} às ${prox.hora}</p>
+            <p class="widget-detalhe"><i class="fas fa-map-marker-alt"></i> ${prox.local}</p>
         ` : `<p class="widget-detalhe">Não tens eventos agendados.</p>`;
 
         conteudoHTML = `
             <div class="widget">
                 <h3>Próximo Evento</h3>
                 ${infoEventoHTML}
+                <div class="widget-actions">
+                    ${prox ? `<a href="minhas_inscricoes.html?evento=${prox.uid_evento}" class="btn btn-primario"><i class="fas fa-ticket-alt"></i> Abrir Bilhete</a>` : 
+                    `<a href="explorar_eventos.html" class="btn btn-primario">Explorar</a>`}
+                </div>
             </div>
             <div class="widget">
                 <h3>Os Meus Bilhetes</h3>
                 <p class="widget-numero">${dados.bilhetes.total}</p>
                 <p class="widget-detalhe">VIP: ${dados.bilhetes.vip} | Normal: ${dados.bilhetes.normal}</p>
+                <div class="widget-actions">
+                    <a href="minhas_inscricoes.html" class="btn btn-primario"><i class="fas fa-list-ul"></i> Ver Todos</a>
+                </div>
             </div>
             <div class="widget">
                 <h3>Gasto Total</h3>
                 <p class="widget-numero widget-dinheiro">${euro(dados.bilhetes.gastoTotal)}</p>
-                <p class="widget-detalhe">Total gasto em inscrições.</p>
+                <p class="widget-detalhe">Total investido em experiências.</p>
+                <div class="widget-actions">
+                  
+                </div>
             </div>
-            <div class="widget">
-                <h3>Notificações</h3>
-                <p class="widget-numero">${dados.notificacoes}</p>
-                <p class="widget-detalhe">Alertas e lembretes novos.</p>
+            <div class="widget widget-cta">
+                <h3>Explorar Eventos?</h3>
+                <p class="widget-detalhe">Encontra workshops e palestras incríveis.</p>
+                <div class="widget-actions">
+                    <a href="explorar_eventos.html" class="btn btn-primario"><i class="fas fa-search"></i> Explorar</a>
+                </div>
             </div>
-             <div class="widget widget-cta">
-                <h3>Explorar novas experiências?</h3>
-                <p class="widget-detalhe">Encontre novos workshops e palestras.</p>
-                <a href="explorar_eventos.html" class="btn btn-primario"><i class="fas fa-search"></i> Explorar Eventos</a>
-            </div>
-
-            <div class="widget-actions">
-                <a href="minhas_inscricoes.html?evento=${encodeURIComponent(prox.uid_evento || "")}"
-                   class="btn btn-primario">
-                  <i class="fas fa-ticket-alt"></i> Abrir bilhete
-                </a>
-              </div>
         `;
     }
 
     if (menuContainer) menuContainer.innerHTML = menuHTML;
     if (conteudoContainer) conteudoContainer.innerHTML = conteudoHTML;
     if (nomeUtilizadorEl) nomeUtilizadorEl.textContent = nomeBase;
-    if (perfilUtilizadorEl) perfilUtilizadorEl.textContent = perfil.charAt(0).toUpperCase() + perfil.slice(1);
+    if (perfilUtilizadorEl) perfilUtilizadorEl.textContent = capitalizar(perfil);
 }
 
 /* ===============================
@@ -230,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const perfil = doc.data().perfil;
+            const perfil = doc.data().perfil || 'participante';
             let dados;
 
             if (perfil === 'organizador') {
